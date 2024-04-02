@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+  application:
+    name: academy
+
+
+jwt:
+  issuer: academy@academy.com
+  secret_key: ${JWT_SECRET_KEY}
+  expiration: 86400000
+  refresh-token:
+    expiration: 604800000
+
