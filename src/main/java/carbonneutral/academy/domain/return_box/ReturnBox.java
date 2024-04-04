@@ -1,6 +1,7 @@
-package carbonneutral.academy.domain.cafe;
+package carbonneutral.academy.domain.return_box;
 
 import carbonneutral.academy.common.BaseEntity;
+import carbonneutral.academy.domain.cafe.Cafe;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,11 +11,11 @@ import lombok.*;
 @Getter
 @Builder
 @Entity
-@Table(name = "cafe")
-public class Cafe extends BaseEntity {
+@Table(name = "return_box")
+public class ReturnBox extends BaseEntity {
 
     @Id
-    @Column(name = "cafe_id", nullable = false, updatable = false)
+    @Column(name = "return_box_id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
@@ -24,9 +25,7 @@ public class Cafe extends BaseEntity {
     @Column(nullable = false)
     private String location;
 
-    //반납 가능 여부
-    @Column(nullable = false)
-    private boolean isReturnable;
-
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_id")
+    private Cafe cafe;
 }

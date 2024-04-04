@@ -1,10 +1,11 @@
 package carbonneutral.academy.domain.use;
 
-import carbonneutral.academy.domain.cafe.Cafe;
-import carbonneutral.academy.common.BaseEntity;
-import carbonneutral.academy.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -13,20 +14,23 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "uses")
-public class Use extends BaseEntity {
+public class Use {
 
     @Id
-    @Column(name = "use_id", nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Long createdAt = setCreatedAt();
 
+
+    private boolean isInUse = true;
     private int point;
+    private int userId;
+    private int cafeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long setCreatedAt() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+        String formattedDate = now.format(formatter);
+        return Long.parseLong(formattedDate);
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_id")
-    private Cafe cafe;
 }
