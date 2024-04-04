@@ -2,6 +2,7 @@ package carbonneutral.academy.user.entity;
 
 import carbonneutral.academy.common.BaseEntity;
 import carbonneutral.academy.user.entity.enums.Role;
+import carbonneutral.academy.user.entity.enums.SocialType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,12 +28,22 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 20)
     private String username;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private SocialType socialType;
 
     @Column(nullable = false)
-    private boolean isOAuth;
+    private int point = 0;
+
+    @Column(length = 20)
+    private String nickname;
+
+    @Column(nullable = false)
+    private boolean gender;
+
 
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
