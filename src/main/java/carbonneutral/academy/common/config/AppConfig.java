@@ -1,6 +1,6 @@
 package carbonneutral.academy.common.config;
 
-import carbonneutral.academy.user.repository.UserRepository;
+import carbonneutral.academy.domain.user.repository.UserRepository;
 import carbonneutral.academy.utils.ApplicationAuditAware;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ public class AppConfig {
   }
 
   @Bean
-  public AuditorAware<Long> auditorAware() {
+  public AuditorAware<Integer> auditorAware() {
     return new ApplicationAuditAware();
   }
 

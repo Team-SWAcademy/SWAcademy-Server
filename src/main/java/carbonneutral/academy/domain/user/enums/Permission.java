@@ -1,4 +1,4 @@
-package carbonneutral.academy.user.entity.enums;
+package carbonneutral.academy.domain.user.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

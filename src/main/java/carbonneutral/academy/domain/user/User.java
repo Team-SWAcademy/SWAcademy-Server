@@ -1,7 +1,9 @@
-package carbonneutral.academy.user.entity;
+package carbonneutral.academy.domain.user;
 
+import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
 import carbonneutral.academy.common.BaseEntity;
-import carbonneutral.academy.user.entity.enums.Role;
+import carbonneutral.academy.domain.user.enums.Role;
+import carbonneutral.academy.domain.user.enums.SocialType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,18 +23,30 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @Column(name = "user_id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
 
     @Column(nullable = false, length = 20)
     private String username;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private SocialType socialType;
 
     @Column(nullable = false)
-    private boolean isOAuth;
+    private int point = 0;
+
+    @Column(length = 20)
+    private String nickname;
+
+    private boolean gender;
+
+    @Column(nullable = false)
+    private boolean isFinished = false;
+
 
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
@@ -74,4 +88,9 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 
+    public void updateOnboarding(PatchOnboardingReq request) {
+        this.nickname = request.getNickname();
+        this.gender = request.isGender();
+        this.isFinished = true;
+    }
 }
