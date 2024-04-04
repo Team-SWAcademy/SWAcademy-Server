@@ -1,4 +1,4 @@
-package carbonneutral.academy.cafe.entity;
+package carbonneutral.academy.domain.cafe;
 
 import carbonneutral.academy.common.BaseEntity;
 import jakarta.persistence.*;

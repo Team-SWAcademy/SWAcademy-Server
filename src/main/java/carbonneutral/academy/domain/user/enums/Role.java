@@ -1,4 +1,4 @@
-package carbonneutral.academy.user.entity.enums;
+package carbonneutral.academy.domain.user.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static carbonneutral.academy.user.entity.enums.Permission.*;
+import static carbonneutral.academy.domain.user.enums.Permission.*;
 
 
 @RequiredArgsConstructor

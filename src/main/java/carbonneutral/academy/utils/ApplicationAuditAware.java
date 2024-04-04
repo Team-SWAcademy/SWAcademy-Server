@@ -1,6 +1,6 @@
 package carbonneutral.academy.utils;
 
-import carbonneutral.academy.user.entity.User;
+import carbonneutral.academy.domain.user.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

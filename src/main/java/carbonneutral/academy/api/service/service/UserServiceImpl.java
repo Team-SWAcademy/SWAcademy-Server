@@ -1,6 +1,6 @@
-package carbonneutral.academy.user.service;
+package carbonneutral.academy.api.service.service;
 
-import carbonneutral.academy.user.repository.UserRepository;
+import carbonneutral.academy.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

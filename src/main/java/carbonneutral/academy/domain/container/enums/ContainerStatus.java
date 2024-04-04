@@ -1,4 +1,4 @@
-package carbonneutral.academy.container.entity.enums;
+package carbonneutral.academy.domain.container.enums;
 
 public enum ContainerStatus {
 

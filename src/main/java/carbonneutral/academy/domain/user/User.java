@@ -1,8 +1,8 @@
-package carbonneutral.academy.user.entity;
+package carbonneutral.academy.domain.user;
 
 import carbonneutral.academy.common.BaseEntity;
-import carbonneutral.academy.user.entity.enums.Role;
-import carbonneutral.academy.user.entity.enums.SocialType;
+import carbonneutral.academy.domain.user.enums.Role;
+import carbonneutral.academy.domain.user.enums.SocialType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,7 +1,7 @@
-package carbonneutral.academy.user.repository;
+package carbonneutral.academy.domain.user.repository;
 
 import carbonneutral.academy.common.BaseEntity;
-import carbonneutral.academy.user.entity.User;
+import carbonneutral.academy.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

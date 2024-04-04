@@ -1,8 +1,8 @@
-package carbonneutral.academy.container.entity;
+package carbonneutral.academy.domain.container;
 
-import carbonneutral.academy.cafe.entity.Cafe;
+import carbonneutral.academy.domain.cafe.Cafe;
 import carbonneutral.academy.common.BaseEntity;
-import carbonneutral.academy.container.entity.enums.ContainerStatus;
+import carbonneutral.academy.domain.container.enums.ContainerStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

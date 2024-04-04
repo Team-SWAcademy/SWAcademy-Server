@@ -1,4 +1,4 @@
-package carbonneutral.academy.user.entity.enums;
+package carbonneutral.academy.domain.user.enums;
 
 public enum SocialType {
     NONE("none"),
