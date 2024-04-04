@@ -15,6 +15,9 @@ public enum SuccessStatus implements BaseCode {
 
     OAUTH_OK(HttpStatus.OK, "USER2003", "소셜 로그인 성공"),
     ONBOARDING_OK(HttpStatus.OK, "USER2004", "온보딩 성공"),
+
+    //이용성공
+    USE_OK(HttpStatus.OK, "USE2000", "이용 성공"),
     ;
 
     private final HttpStatus httpStatus;
