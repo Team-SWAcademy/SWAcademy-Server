@@ -1,12 +1,17 @@
 package carbonneutral.academy.domain.user.repository;
 
-import carbonneutral.academy.common.BaseEntity;
 import carbonneutral.academy.domain.user.User;
+import carbonneutral.academy.domain.user.enums.SocialType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import static carbonneutral.academy.common.BaseEntity.*;
 
-    Optional<User> findByUsernameAndState(String username, BaseEntity.State state);
+public interface UserRepository extends JpaRepository<User, Integer> {
+
+    Optional<User> findByUsernameAndState(String username, State state);
+
+    boolean existsByUsernameAndSocialTypeAndState(String username, SocialType socialType, State state);
+
 }

@@ -13,6 +13,8 @@ public enum SuccessStatus implements BaseCode {
     // 일반적인 응답
     OK(HttpStatus.OK, "COMMON2000", "성공입니다."),
 
+    OAUTH_OK(HttpStatus.OK, "USER2003", "소셜 로그인 성공"),
+    ONBOARDING_OK(HttpStatus.OK, "USER2004", "온보딩 성공"),
     ;
 
     private final HttpStatus httpStatus;

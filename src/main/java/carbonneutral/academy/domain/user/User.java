@@ -1,5 +1,6 @@
 package carbonneutral.academy.domain.user;
 
+import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
 import carbonneutral.academy.common.BaseEntity;
 import carbonneutral.academy.domain.user.enums.Role;
 import carbonneutral.academy.domain.user.enums.SocialType;
@@ -22,7 +23,7 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @Column(name = "user_id", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
 
     @Column(nullable = false, length = 20)
@@ -41,8 +42,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(length = 20)
     private String nickname;
 
-    @Column(nullable = false)
     private boolean gender;
+
+    @Column(nullable = false)
+    private boolean isFinished = false;
 
 
     @Column(length = 10)
@@ -85,4 +88,9 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 
+    public void updateOnboarding(PatchOnboardingReq request) {
+        this.nickname = request.getNickname();
+        this.gender = request.isGender();
+        this.isFinished = true;
+    }
 }
