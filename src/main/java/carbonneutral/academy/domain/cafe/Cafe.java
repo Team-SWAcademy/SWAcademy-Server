@@ -24,6 +24,9 @@ public class Cafe extends BaseEntity {
     @Column(nullable = false)
     private String location;
 
+    @Column(nullable = false)
+    private String imageUrl;
+
     //반납 가능 여부
     @Column(nullable = false)
     private boolean isReturnable;

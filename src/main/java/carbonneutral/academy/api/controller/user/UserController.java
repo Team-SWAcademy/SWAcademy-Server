@@ -5,6 +5,7 @@ import carbonneutral.academy.api.controller.auth.dto.response.PatchOnboardingRes
 import carbonneutral.academy.common.BaseResponse;
 import carbonneutral.academy.api.service.service.UserService;
 import carbonneutral.academy.domain.user.User;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping("/onboarding")
+    @Operation(summary = "온보딩 API", description = "온보딩을 진행합니다.")
     public BaseResponse<PatchOnboardingRes> onboarding(@AuthenticationPrincipal User user, @Validated @RequestBody PatchOnboardingReq request) {
         return BaseResponse.of(ONBOARDING_OK, userService.onboarding(user, request));
     }
