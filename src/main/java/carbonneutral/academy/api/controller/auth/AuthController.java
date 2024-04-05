@@ -34,6 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/{socialType}/login")
+    @Operation(summary = "소셜 로그인 API",description = "소셜 로그인을 진행합니다.")
     public BaseResponse<PostSocialRes> login(@PathVariable(name="socialType") String socialLoginPath,
                                              @RequestParam("code") String code) {
         SocialType socialType = SocialType.valueOf(socialLoginPath.toUpperCase());

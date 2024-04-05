@@ -18,7 +18,7 @@ public class Use {
 
     @Id
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Long createdAt = setCreatedAt();
+    private Long createdAt;
 
 
     private boolean isInUse = true;
@@ -26,11 +26,5 @@ public class Use {
     private int userId;
     private int cafeId;
 
-    private Long setCreatedAt() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        String formattedDate = now.format(formatter);
-        return Long.parseLong(formattedDate);
-    }
 
 }

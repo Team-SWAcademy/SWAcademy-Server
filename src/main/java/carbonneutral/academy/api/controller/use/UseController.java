@@ -1,10 +1,21 @@
 package carbonneutral.academy.api.controller.use;
 
+import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
+import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
+import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
+import carbonneutral.academy.api.service.use.UseService;
+import carbonneutral.academy.common.BaseResponse;
+import carbonneutral.academy.domain.user.User;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+
+import static carbonneutral.academy.common.code.status.SuccessStatus.*;
 
 @Slf4j
 @Tag(name = "use controller", description = "다회용기 이용 관련 API")
@@ -12,4 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/uses")
 public class UseController {
+
+    private final UseService useService;
+
+    //유저가 이용중인 다회용기 조회 API List 이용
+    @GetMapping
+    @Operation(summary = "유저가 이용중인 다회용기 조회 API",description = "유저가 이용중인 다회용기를 조회합니다.")
+    BaseResponse<GetHomeRes> getInUsesMultipleTimeContainers(@AuthenticationPrincipal User user) {
+        return BaseResponse.of(IN_USES_OK, useService.getInUsesMultipleTimeContainers(user));
+    }
+
+    @PostMapping
+    @Operation(summary = "카페에서 다회용기 이용 시 API",description = "앱에서 QR 인증을 통해 카페에서 다회용기를 이용합니다.")
+    BaseResponse<PostUseRes> useMultipleTimeContainers(@AuthenticationPrincipal User user,
+                                                       @Validated @RequestBody PostUseReq postUseReq) {
+        return BaseResponse.of(USE_SAVE_OK, useService.useMultipleTimeContainers(user, postUseReq));
+    }
 }
