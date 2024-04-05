@@ -1,6 +1,8 @@
 package carbonneutral.academy.api.service.use;
 
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
+import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetUseRes;
 import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
 import carbonneutral.academy.api.converter.use.UseConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
@@ -9,10 +11,13 @@ import carbonneutral.academy.domain.cafe.repository.CafeRepository;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.repository.UseRepository;
 import carbonneutral.academy.domain.user.User;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_CAFE;
 
@@ -24,6 +29,16 @@ public class UseServiceImpl implements UseService {
 
     private final UseRepository useRepository;
     private final CafeRepository cafeRepository;
+
+    @Override
+    public GetHomeRes getInUsesMultipleTimeContainers(User user) {
+        List<GetUseRes> useResList = useRepository.findByUserIdAndIsInUse(user.getId(), true).stream()
+                .map(use -> {
+                    Cafe cafe = cafeRepository.findById(use.getCafeId()).orElseThrow(() -> new BaseException(NOT_FIND_CAFE));
+                    return UseConverter.toGetUseRes(use, cafe);})
+                .toList();
+        return UseConverter.toGetHomesRes(user, useResList);
+    }
 
     @Override
     @Transactional

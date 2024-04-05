@@ -17,7 +17,9 @@ public enum SuccessStatus implements BaseCode {
     ONBOARDING_OK(HttpStatus.OK, "USER2004", "온보딩 성공"),
 
     //이용성공
-    USE_OK(HttpStatus.OK, "USE2000", "이용 성공"),
+    USE_SAVE_OK(HttpStatus.CREATED, "USE2000", "이용 성공"),
+    //이용중인 다회용기 조회 성공
+    IN_USES_OK(HttpStatus.OK, "USE2001", "이용중인 다회용기 조회 성공")
     ;
 
     private final HttpStatus httpStatus;
