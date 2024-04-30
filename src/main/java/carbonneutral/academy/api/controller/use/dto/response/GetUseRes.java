@@ -1,9 +1,12 @@
 package carbonneutral.academy.api.controller.use.dto.response;
 
+import carbonneutral.academy.domain.use.enums.UseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -11,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetUseRes {
 
-    private int cafeId;
-    private String cafeImageUrl;
-    private boolean isInUse;
-    private String cafeName;
-    private Long rentalTime;
+    private int rentalLocationId;
+    private String locationImageUrl;
+    private String locationName;
+    private LocalDateTime useAt;
+    private UseStatus status;
 }

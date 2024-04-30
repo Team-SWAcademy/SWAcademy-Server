@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostUseReq {
 
-    private String cafeName;
+    private String locationName;
 
-    private String cafeLocation;
+    private String locationAddress;
 
     private int point;
+
+    private int multiUseContainerId;
 }
