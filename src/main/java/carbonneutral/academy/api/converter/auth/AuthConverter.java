@@ -1,7 +1,7 @@
 package carbonneutral.academy.api.converter.auth;
 
 import carbonneutral.academy.api.controller.auth.dto.response.GetKakaoRes;
-import carbonneutral.academy.api.controller.auth.dto.response.PatchOnboardingRes;
+import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
 import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.enums.SocialType;
@@ -25,12 +25,13 @@ public class AuthConverter {
                 .id(user.getId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .isFinished(user.isFinished())
                 .build();
 
     }
 
-    public static PatchOnboardingRes toPatchOnboardingRes(User user) {
-        return PatchOnboardingRes.builder()
+    public static PatchAdditionalInfoRes toPatchAdditionalInfoRes(User user) {
+        return PatchAdditionalInfoRes.builder()
                 .id(user.getId())
                 .isFinished(user.isFinished())
                 .build();

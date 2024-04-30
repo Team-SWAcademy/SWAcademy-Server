@@ -1,6 +1,6 @@
 package carbonneutral.academy.domain.user;
 
-import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
+import carbonneutral.academy.api.controller.auth.dto.request.PatchAdditionalInfoReq;
 import carbonneutral.academy.common.BaseEntity;
 import carbonneutral.academy.domain.user.enums.Role;
 import carbonneutral.academy.domain.user.enums.SocialType;
@@ -88,7 +88,7 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 
-    public void updateOnboarding(PatchOnboardingReq request) {
+    public void updateAdditionalInfo(PatchAdditionalInfoReq request) {
         this.nickname = request.getNickname();
         this.gender = request.isGender();
         this.isFinished = true;

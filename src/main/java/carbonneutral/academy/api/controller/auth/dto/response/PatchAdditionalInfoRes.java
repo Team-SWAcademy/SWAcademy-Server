@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class PatchOnboardingRes {
+public class PatchAdditionalInfoRes {
 
     private int id;
     private boolean isFinished;

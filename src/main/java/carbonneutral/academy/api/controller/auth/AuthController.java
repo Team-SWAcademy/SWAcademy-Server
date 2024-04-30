@@ -1,22 +1,16 @@
 package carbonneutral.academy.api.controller.auth;
 
-import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
-import carbonneutral.academy.api.controller.auth.dto.response.PatchOnboardingRes;
 import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.api.service.auth.AuthService;
 import carbonneutral.academy.common.BaseResponse;
-import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.enums.SocialType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static carbonneutral.academy.common.code.status.SuccessStatus.OAUTH_OK;
-import static carbonneutral.academy.common.code.status.SuccessStatus.ONBOARDING_OK;
 
 @Slf4j
 @Tag(name = "auth controller", description = "인증 필요 없는 API")
