@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class PatchOnboardingReq {
+public class PatchAdditionalInfoReq {
 
     @NotNull
     private String nickname;
