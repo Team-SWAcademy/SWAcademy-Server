@@ -6,12 +6,11 @@ import carbonneutral.academy.api.controller.use.dto.response.GetUseRes;
 import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
 import carbonneutral.academy.api.converter.use.UseConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
-import carbonneutral.academy.domain.cafe.Cafe;
-import carbonneutral.academy.domain.cafe.repository.CafeRepository;
+import carbonneutral.academy.domain.location.Location;
+import carbonneutral.academy.domain.location.repository.LocationRepository;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.repository.UseRepository;
 import carbonneutral.academy.domain.user.User;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_CAFE;
+import static carbonneutral.academy.common.BaseEntity.State.*;
+import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_LOCATION;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +28,14 @@ import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_CAFE
 public class UseServiceImpl implements UseService {
 
     private final UseRepository useRepository;
-    private final CafeRepository cafeRepository;
+    private final LocationRepository locationRepository;
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
-        List<GetUseRes> useResList = useRepository.findByUserIdAndIsInUse(user.getId(), true).stream()
+        List<GetUseRes> useResList = useRepository.findByUserId(user.getId()).stream()
                 .map(use -> {
-                    Cafe cafe = cafeRepository.findById(use.getCafeId()).orElseThrow(() -> new BaseException(NOT_FIND_CAFE));
-                    return UseConverter.toGetUseRes(use, cafe);})
+                    Location location = locationRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+                    return UseConverter.toGetUseRes(use, location);})
                 .toList();
         return UseConverter.toGetHomesRes(user, useResList);
     }
@@ -43,9 +43,9 @@ public class UseServiceImpl implements UseService {
     @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
-        Cafe cafe = cafeRepository.findByNameAndLocation(postUseReq.getCafeName(), postUseReq.getCafeLocation())
-                .orElseThrow(() -> new BaseException(NOT_FIND_CAFE));
-        Use use = UseConverter.toUse(user, cafe, postUseReq.getPoint());
+        Location location = locationRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
         useRepository.save(use);
         return UseConverter.toPostUseRes(use);
     }
