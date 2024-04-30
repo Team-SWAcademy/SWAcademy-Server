@@ -1,4 +1,4 @@
-name: SWacademy Dev CI/CD
+name: Swacademy Dev CI/CD
 
 on:
   pull_request:
