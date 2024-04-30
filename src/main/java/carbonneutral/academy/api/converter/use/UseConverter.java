@@ -3,45 +3,51 @@ package carbonneutral.academy.api.converter.use;
 import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
 import carbonneutral.academy.api.controller.use.dto.response.GetUseRes;
 import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
-import carbonneutral.academy.domain.cafe.Cafe;
+import carbonneutral.academy.domain.location.Location;
 import carbonneutral.academy.domain.use.Use;
+import carbonneutral.academy.domain.use.enums.UseStatus;
 import carbonneutral.academy.domain.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static carbonneutral.academy.domain.use.enums.UseStatus.USING;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UseConverter {
 
-    public static Use toUse(User user, Cafe cafe, int point) {
+    public static Use toUse(User user, Location location, int point, int multiUseContainerId) {
         return Use.builder()
-                .createdAt(setCreatedAt())
-                .userId(user.getId())
-                .cafeId(cafe.getId())
+                .useAt(LocalDateTime.now())
+                .user(user)
+                .rentalLocation(location)
                 .point(point)
-                .isInUse(true)
+                .multiUseContainerId(multiUseContainerId)
+                .returnTime(null)
+                .status(USING)
                 .build();
     }
 
     public static PostUseRes toPostUseRes(Use use) {
         return PostUseRes.builder()
-                .createdAt(use.getCreatedAt())
+                .useAt(use.getUseAt())
                 .point(use.getPoint())
-                .userId(use.getUserId())
-                .cafeId(use.getCafeId())
+                .userId(use.getUser().getId())
+                .locationId(use.getRentalLocation().getId())
+                .multiUseContainerId(use.getMultiUseContainerId())
+                .status(use.getStatus())
                 .build();
     }
 
-    public static GetUseRes toGetUseRes(Use use, Cafe cafe) {
+    public static GetUseRes toGetUseRes(Use use, Location location) {
         return GetUseRes.builder()
-                .cafeId(use.getCafeId())
-                .cafeImageUrl(cafe.getImageUrl())
-                .isInUse(use.isInUse())
-                .cafeName(cafe.getName())
-                .rentalTime(use.getCreatedAt())
+                .rentalLocationId(location.getId())
+                .locationImageUrl(location.getImageUrl())
+                .locationName(location.getName())
+                .useAt(use.getUseAt())
+                .status(use.getStatus())
                 .build();
     }
 
@@ -54,10 +60,4 @@ public class UseConverter {
                 .build();
     }
 
-    private static Long setCreatedAt() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        String formattedDate = now.format(formatter);
-        return Long.parseLong(formattedDate);
-    }
 }
