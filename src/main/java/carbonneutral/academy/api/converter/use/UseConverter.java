@@ -1,9 +1,9 @@
 package carbonneutral.academy.api.converter.use;
 
-import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetUseRes;
-import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
+import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.domain.location.Location;
+import carbonneutral.academy.domain.mapping.LocationContainer;
+import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.enums.UseStatus;
 import carbonneutral.academy.domain.user.User;
@@ -60,4 +60,29 @@ public class UseConverter {
                 .build();
     }
 
+
+    public static GetReturnRes toGetReturnRes(Location returnLocation) {
+        return GetReturnRes.builder()
+                .locationId(returnLocation.getId())
+                .name(returnLocation.getName())
+                .address(returnLocation.getAddress())
+                .latitude(returnLocation.getLatitude())
+                .longitude(returnLocation.getLongitude())
+                .locationType(returnLocation.getLocationType())
+                .imageUrl(returnLocation.getImageUrl())
+                .build();
+    }
+
+    public static GetUseDetailRes toGetUseDetailRes(Use use, Location location, List<GetReturnRes> getReturnResList, String multiUseContainer) {
+        return GetUseDetailRes.builder()
+                .rentalLocationId(location.getId())
+                .locationImageUrl(location.getImageUrl())
+                .locationName(location.getName())
+                .locationAddress(location.getAddress())
+                .useAt(use.getUseAt())
+                .point(use.getPoint())
+                .multiUseContainer(multiUseContainer)
+                .getReturnResList(getReturnResList)
+                .build();
+    }
 }
