@@ -1,10 +1,10 @@
 package carbonneutral.academy.api.service.service;
 
-import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
-import carbonneutral.academy.api.controller.auth.dto.response.PatchOnboardingRes;
+import carbonneutral.academy.api.controller.auth.dto.request.PatchAdditionalInfoReq;
+import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
 import carbonneutral.academy.domain.user.User;
 
 public interface UserService {
 
-    PatchOnboardingRes onboarding(User user, PatchOnboardingReq request);
+    PatchAdditionalInfoRes additionalInfo(User user, PatchAdditionalInfoReq request);
 }

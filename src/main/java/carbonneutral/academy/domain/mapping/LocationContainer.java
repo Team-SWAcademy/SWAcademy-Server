@@ -27,4 +27,8 @@ public class LocationContainer {
     @JoinColumn(name = "multi_use_container_id")
     private MultiUseContainer multiUseContainer;
 
+    //getLocationId
+    public int getLocationId() {
+        return location.getId();
+    }
 }

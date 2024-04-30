@@ -1,8 +1,6 @@
 package carbonneutral.academy.api.service.auth;
 
-import carbonneutral.academy.api.controller.auth.dto.request.PatchOnboardingReq;
 import carbonneutral.academy.api.controller.auth.dto.response.GetKakaoRes;
-import carbonneutral.academy.api.controller.auth.dto.response.PatchOnboardingRes;
 import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.api.converter.auth.AuthConverter;
 import carbonneutral.academy.api.service.auth.social.kakao.KakaoLoginService;
