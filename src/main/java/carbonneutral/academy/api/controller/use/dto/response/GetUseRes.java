@@ -19,4 +19,5 @@ public class GetUseRes {
     private String locationName;
     private String useAt;
     private UseStatus status;
+    private String multiUseContainerType;
 }

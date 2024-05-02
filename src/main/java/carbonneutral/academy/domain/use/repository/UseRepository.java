@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface UseRepository extends JpaRepository<Use, LocalDateTime> {
     List<Use> findByUserIdAndStatus(int userId, UseStatus status);
-    Optional<Use> findByUserIdAndUseAtAndStatus(int userId, LocalDateTime useAt, UseStatus status);
+    Optional<Use> findByUserIdAndUseAtBetweenAndStatus(int userId, LocalDateTime startRange, LocalDateTime endRange, UseStatus status);
 }

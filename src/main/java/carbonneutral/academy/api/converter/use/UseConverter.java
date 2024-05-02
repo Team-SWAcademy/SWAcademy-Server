@@ -1,7 +1,10 @@
 package carbonneutral.academy.api.converter.use;
 
 import carbonneutral.academy.api.controller.use.dto.response.*;
+import carbonneutral.academy.api.converter.time.TimeConverter;
 import carbonneutral.academy.domain.location.Location;
+import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
+import carbonneutral.academy.domain.point.Point;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.user.User;
 import lombok.AccessLevel;
@@ -29,7 +32,7 @@ public class UseConverter {
 
     public static PostUseRes toPostUseRes(Use use) {
         return PostUseRes.builder()
-                .useAt(use.getUseAt().toString())
+                .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
                 .userId(use.getUser().getId())
                 .locationId(use.getRentalLocation().getId())
@@ -38,19 +41,21 @@ public class UseConverter {
                 .build();
     }
 
-    public static GetUseRes toGetUseRes(Use use, Location location) {
+    public static GetUseRes toGetUseRes(Use use, Location location, MultiUseContainer multiUseContainer) {
         return GetUseRes.builder()
                 .rentalLocationId(location.getId())
                 .locationImageUrl(location.getImageUrl())
                 .locationName(location.getName())
-                .useAt(use.getUseAt().toString())
+                .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .status(use.getStatus())
+                .multiUseContainerType(multiUseContainer.getType())
                 .build();
     }
 
-    public static GetHomeRes toGetHomesRes(User user, List<GetUseRes> useResList) {
+    public static GetHomeRes toGetHomesRes(User user, Point point, List<GetUseRes> useResList) {
         return GetHomeRes.builder()
                 .userId(user.getId())
+                .currentPoint(point.getAccumulatedPoint() - point.getUtilizedPoint())
                 .nickname(user.getNickname())
                 .getUseResList(useResList)
                 .useCount(useResList.size())
@@ -76,7 +81,7 @@ public class UseConverter {
                 .locationImageUrl(location.getImageUrl())
                 .locationName(location.getName())
                 .locationAddress(location.getAddress())
-                .useAt(use.getUseAt().toString())
+                .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
                 .multiUseContainer(multiUseContainer)
                 .getReturnResList(getReturnResList)

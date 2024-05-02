@@ -17,4 +17,5 @@ public class GetHomeRes {
     private String nickname;
     private List<GetUseRes> getUseResList;
     private int useCount;
+    private int currentPoint;
 }

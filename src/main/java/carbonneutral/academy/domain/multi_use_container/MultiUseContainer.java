@@ -18,6 +18,6 @@ public class MultiUseContainer {
     private int id;
 
     @Column(nullable = false, length = 20)
-    private String name;
+    private String type;
 
 }
