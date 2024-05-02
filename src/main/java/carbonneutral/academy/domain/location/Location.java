@@ -34,13 +34,13 @@ public class Location extends BaseEntity {
     private BigDecimal longitude;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20, name = "location_type")
     private LocationType locationType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_returned")
     private boolean isReturned = false;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 200, name = "image_url")
     private String imageUrl;
 
 }

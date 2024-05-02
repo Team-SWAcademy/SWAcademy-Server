@@ -11,5 +11,5 @@ public interface UseService {
     GetHomeRes getInUsesMultipleTimeContainers(User user);
     PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq);
 
-    GetUseDetailRes getInUseMultipleTimeContainer(User user, LocalDateTime useAt);
+    GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt);
 }
