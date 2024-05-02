@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Use {
 
     @Id
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "use_at")
     private LocalDateTime useAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,9 +30,10 @@ public class Use {
     @JoinColumn(name = "location_id")
     private Location rentalLocation;
 
+    @Column(name = "return_time")
     private LocalDateTime returnTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "multi_use_container_id")
     private int multiUseContainerId;
 
     @Column(nullable = false)

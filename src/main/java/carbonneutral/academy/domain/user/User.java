@@ -33,7 +33,7 @@ public class User extends BaseEntity implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, name = "social_type")
     private SocialType socialType;
 
     @Column(nullable = false)
@@ -44,7 +44,7 @@ public class User extends BaseEntity implements UserDetails {
 
     private boolean gender;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_finished")
     private boolean isFinished = false;
 
 

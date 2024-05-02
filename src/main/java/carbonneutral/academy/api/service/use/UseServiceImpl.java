@@ -70,7 +70,7 @@ public class UseServiceImpl implements UseService {
                 .toList();
         List<GetReturnRes> returnResList = Stream.concat(returnResList1.stream(), returnResList2.stream())
                 .toList();
-        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getName());
+        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getType());
     }
 
     @Override
