@@ -27,8 +27,12 @@ public class Use {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "rental_location_id")
     private Location rentalLocation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "return_location_id")
+    private Location returnLocation;
 
     @Column(name = "return_time")
     private LocalDateTime returnTime;

@@ -36,8 +36,6 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 20, name = "social_type")
     private SocialType socialType;
 
-    @Column(nullable = false)
-    private int point = 0;
 
     @Column(length = 20)
     private String nickname;
