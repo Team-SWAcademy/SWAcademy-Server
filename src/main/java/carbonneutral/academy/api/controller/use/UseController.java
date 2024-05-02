@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.time.LocalDateTime;
 
 import static carbonneutral.academy.common.code.status.SuccessStatus.*;
 
@@ -36,9 +35,9 @@ public class UseController {
         return BaseResponse.of(IN_USES_OK, useService.getInUsesMultipleTimeContainers(user));
     }
 
-    @GetMapping("{useAt}")
+    @GetMapping("{use-at}")
     @Operation(summary = "유저가 이용중인 다회용기 단일 조회 API",description = "유저가 이용중인 다회용기를 단일 조회합니다.")
-    BaseResponse<GetUseDetailRes> getInUseMultipleTimeContainer(@AuthenticationPrincipal User user, @PathVariable("useAt") LocalDateTime useAt) {
+    BaseResponse<GetUseDetailRes> getInUseMultipleTimeContainer(@AuthenticationPrincipal User user, @PathVariable("use-at") String useAt) {
         return BaseResponse.of(IN_USE_OK, useService.getInUseMultipleTimeContainer(user, useAt));
     }
 
