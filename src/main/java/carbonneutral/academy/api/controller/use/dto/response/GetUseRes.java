@@ -17,6 +17,6 @@ public class GetUseRes {
     private int rentalLocationId;
     private String locationImageUrl;
     private String locationName;
-    private LocalDateTime useAt;
+    private String useAt;
     private UseStatus status;
 }
