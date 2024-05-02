@@ -18,7 +18,7 @@ public class GetUseDetailRes {
     private String locationImageUrl;
     private String locationName;
     private String locationAddress;
-    private LocalDateTime useAt;
+    private String useAt;
     private int point;
     private String multiUseContainer;
     private List<GetReturnRes> getReturnResList;
