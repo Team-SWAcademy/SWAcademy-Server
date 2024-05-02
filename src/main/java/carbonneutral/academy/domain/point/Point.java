@@ -16,8 +16,9 @@ public class Point {
 
 
     @Id
-    @Column(name = "user_id", nullable = false, updatable = false)
-    private int userId;
+    @Column(name = "point_id", nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
