@@ -2,10 +2,7 @@ package carbonneutral.academy.api.converter.use;
 
 import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.domain.location.Location;
-import carbonneutral.academy.domain.mapping.LocationContainer;
-import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
 import carbonneutral.academy.domain.use.Use;
-import carbonneutral.academy.domain.use.enums.UseStatus;
 import carbonneutral.academy.domain.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -32,7 +29,7 @@ public class UseConverter {
 
     public static PostUseRes toPostUseRes(Use use) {
         return PostUseRes.builder()
-                .useAt(use.getUseAt())
+                .useAt(use.getUseAt().toString())
                 .point(use.getPoint())
                 .userId(use.getUser().getId())
                 .locationId(use.getRentalLocation().getId())
@@ -46,7 +43,7 @@ public class UseConverter {
                 .rentalLocationId(location.getId())
                 .locationImageUrl(location.getImageUrl())
                 .locationName(location.getName())
-                .useAt(use.getUseAt())
+                .useAt(use.getUseAt().toString())
                 .status(use.getStatus())
                 .build();
     }
@@ -79,7 +76,7 @@ public class UseConverter {
                 .locationImageUrl(location.getImageUrl())
                 .locationName(location.getName())
                 .locationAddress(location.getAddress())
-                .useAt(use.getUseAt())
+                .useAt(use.getUseAt().toString())
                 .point(use.getPoint())
                 .multiUseContainer(multiUseContainer)
                 .getReturnResList(getReturnResList)

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class PostUseRes {
-    private LocalDateTime useAt;
+    private String useAt;
     private int point;
     private int userId;
     private int locationId;
