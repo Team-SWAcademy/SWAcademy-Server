@@ -35,6 +35,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //MULTI_USE_CONTAINER
     NOT_FIND_MULTI_USE_CONTAINER(HttpStatus.NOT_FOUND, "MULTI_USE_CONTAINER4000", "존재하지 않는 다회용기입니다."),
 
+    NOT_FIND_POINT(HttpStatus.NOT_FOUND, "POINT4000", "존재하지 않는 포인트입니다."),
+
     EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4000", "JWT를 입력해주세요"),
     INVALID_JWT(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(HttpStatus.FORBIDDEN, "JWT4002", "권한이 없는 유저의 접근입니다."),

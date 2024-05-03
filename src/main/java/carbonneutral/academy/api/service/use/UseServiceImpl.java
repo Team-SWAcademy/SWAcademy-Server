@@ -2,6 +2,7 @@ package carbonneutral.academy.api.service.use;
 
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
 import carbonneutral.academy.api.controller.use.dto.response.*;
+import carbonneutral.academy.api.converter.time.TimeConverter;
 import carbonneutral.academy.api.converter.use.UseConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.location.Location;
@@ -11,6 +12,8 @@ import carbonneutral.academy.domain.mapping.LocationContainer;
 import carbonneutral.academy.domain.mapping.repository.LocationContainerRepository;
 import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
 import carbonneutral.academy.domain.multi_use_container.MultiUseContainerRepository;
+import carbonneutral.academy.domain.point.Point;
+import carbonneutral.academy.domain.point.repository.PointRepository;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.repository.UseRepository;
 import carbonneutral.academy.domain.user.User;
@@ -37,20 +40,24 @@ public class UseServiceImpl implements UseService {
     private final LocationRepository locationRepository;
     private final MultiUseContainerRepository multiUseContainerRepository;
     private final LocationContainerRepository locationContainerRepository;
+    private final PointRepository pointRepository;
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
         List<GetUseRes> useResList = useRepository.findByUserIdAndStatus(user.getId(), USING).stream()
                 .map(use -> {
                     Location location = locationRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
-                    return UseConverter.toGetUseRes(use, location);})
+                    MultiUseContainer multiUseContainer = multiUseContainerRepository.findById(use.getMultiUseContainerId()).orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
+                    return UseConverter.toGetUseRes(use, location, multiUseContainer);})
                 .toList();
-        return UseConverter.toGetHomesRes(user, useResList);
+        Point point = pointRepository.findByUserId(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        return UseConverter.toGetHomesRes(user, point, useResList);
     }
 
     @Override
-    public GetUseDetailRes getInUseMultipleTimeContainer(User user, LocalDateTime useAt) {
-        Use use = useRepository.findByUserIdAndUseAtAndStatus(user.getId(), useAt, USING)
+    public GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt) {
+        List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(useAt);
+        Use use = useRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE));
         MultiUseContainer multiUseContainer = multiUseContainerRepository.findById(use.getMultiUseContainerId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
@@ -70,7 +77,7 @@ public class UseServiceImpl implements UseService {
                 .toList();
         List<GetReturnRes> returnResList = Stream.concat(returnResList1.stream(), returnResList2.stream())
                 .toList();
-        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getName());
+        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getType());
     }
 
     @Override
