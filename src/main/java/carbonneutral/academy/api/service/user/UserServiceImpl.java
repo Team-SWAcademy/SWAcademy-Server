@@ -1,0 +1,88 @@
+package carbonneutral.academy.api.service.user;
+
+import carbonneutral.academy.api.controller.auth.dto.request.PatchAdditionalInfoReq;
+import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetDailyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetDailyStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetDailyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetMyPageRes;
+import carbonneutral.academy.api.converter.auth.AuthConverter;
+import carbonneutral.academy.api.converter.user.UserConverter;
+import carbonneutral.academy.common.exceptions.BaseException;
+import carbonneutral.academy.domain.point.Point;
+import carbonneutral.academy.domain.point.repository.PointJpaRepository;
+import carbonneutral.academy.domain.use.repository.UseQueryRepository;
+import carbonneutral.academy.domain.user.User;
+import carbonneutral.academy.domain.user.repository.UserJpaRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_POINT;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Slf4j
+public class UserServiceImpl implements UserService {
+
+    private final UserJpaRepository userJpaRepository;
+    private final UseQueryRepository useQueryRepository;
+    private final PointJpaRepository pointJpaRepository;
+    @Override
+    @Transactional
+    public PatchAdditionalInfoRes additionalInfo(User user, PatchAdditionalInfoReq request) {
+        user.updateAdditionalInfo(request);
+        User updateUser = userJpaRepository.save(user);
+        log.info("updateUser : {}", updateUser.getId());
+
+        return AuthConverter.toPatchAdditionalInfoRes(updateUser);
+    }
+
+    public GetMyPageRes mypage(User user) {
+        List<GetDailyStatisticsRes> dailyStatisticsResList = getDailyStatistics(user);
+        Point point = pointJpaRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, point);
+    }
+
+
+    private List<GetDailyStatisticsRes> getDailyStatistics(User user) {
+        List<GetDailyUseStatisticsRes> dailyUseStatistics = useQueryRepository.getDailyUseStatistics(user);
+        List<GetDailyReturnStatisticsRes> dailyReturnStatistics = useQueryRepository.getDailyReturnStatistics(user);
+        Map<Integer, GetDailyStatisticsRes> statisticsMap = new HashMap<>();
+        for (int dayOfWeek = 1; dayOfWeek <= 7; dayOfWeek++) {
+            statisticsMap.put(dayOfWeek, new GetDailyStatisticsRes(dayOfWeek, 0, 0));
+        }
+
+        for (GetDailyUseStatisticsRes useStat : dailyUseStatistics) {
+            int convertedDayOfWeek = convertDayOfWeek(useStat.getDayOfWeek());
+            GetDailyStatisticsRes dailyStat = statisticsMap.get(convertedDayOfWeek);
+            dailyStat.setUseCount(dailyStat.getUseCount() + useStat.getUseCount());
+        }
+
+        for (GetDailyReturnStatisticsRes returnStat : dailyReturnStatistics) {
+            int convertedDayOfWeek = convertDayOfWeek(returnStat.getDayOfWeek());
+            GetDailyStatisticsRes dailyStat = statisticsMap.get(convertedDayOfWeek);
+            dailyStat.setReturnCount(dailyStat.getReturnCount() + returnStat.getReturnCount());
+        }
+        List<GetDailyStatisticsRes> dailyStatisticsRes = new ArrayList<>(statisticsMap.values());
+        dailyStatisticsRes.sort(Comparator.comparingInt(GetDailyStatisticsRes::getDayOfWeek));
+
+        return dailyStatisticsRes;
+    }
+
+    private int convertDayOfWeek(int dayOfWeek) {
+        if (dayOfWeek == Calendar.SUNDAY) {
+            return 7;
+        } else {
+            return dayOfWeek - 1;
+        }
+    }
+
+
+
+}

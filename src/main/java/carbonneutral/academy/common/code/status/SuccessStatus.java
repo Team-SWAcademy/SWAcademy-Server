@@ -16,6 +16,7 @@ public enum SuccessStatus implements BaseCode {
     OAUTH_OK(HttpStatus.OK, "USER2003", "소셜 로그인 성공"),
     //추가정보 입력 성공
     ADDITIONAL_INFO_OK(HttpStatus.OK, "USER2004", "추가정보 입력 성공"),
+    MYPAGE_OK(HttpStatus.OK, "USER2005", "마이페이지 조회 성공"),
 
     //이용성공
     USE_SAVE_OK(HttpStatus.CREATED, "USE2000", "이용 성공"),

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface LocationContainerRepository extends JpaRepository<LocationContainer, Integer> {
+public interface LocationContainerJpaRepository extends JpaRepository<LocationContainer, Integer> {
 
     List<LocationContainer> findByMultiUseContainerId(int multiUseContainerId);
 
