@@ -1,4 +1,4 @@
-package carbonneutral.academy.api.controller.use.dto.response;
+package carbonneutral.academy.api.controller.use.dto.response.statistics.daily;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -8,15 +8,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Builder
-public class GetDailyReturnStatisticsRes {
+public class GetDailyUseStatisticsRes {
 
     private int dayOfWeek;
-    private int returnCount;
+    private int useCount;
 
     @QueryProjection
-    public GetDailyReturnStatisticsRes(int dayOfWeek, int returnCount) {
+    public GetDailyUseStatisticsRes(int dayOfWeek, int useCount) {
         this.dayOfWeek = dayOfWeek;
-        this.returnCount = returnCount;
+        this.useCount = useCount;
     }
-
 }

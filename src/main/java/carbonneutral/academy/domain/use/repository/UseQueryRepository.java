@@ -1,9 +1,13 @@
 package carbonneutral.academy.domain.use.repository;
 
-import carbonneutral.academy.api.controller.use.dto.response.GetDailyReturnStatisticsRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetDailyUseStatisticsRes;
-import carbonneutral.academy.api.controller.use.dto.response.QGetDailyReturnStatisticsRes;
-import carbonneutral.academy.api.controller.use.dto.response.QGetDailyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.QGetDailyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.QGetDailyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.QGetMonthlyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.QGetMonthlyUseStatisticsRes;
 import carbonneutral.academy.domain.use.enums.UseStatus;
 import carbonneutral.academy.domain.user.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -55,6 +59,39 @@ public class UseQueryRepository {
                 .fetch();
     }
 
+    public List<GetMonthlyUseStatisticsRes> getMonthlyUseStatistics(User user) {
+        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1);
+        return queryFactory
+                .select(new QGetMonthlyUseStatisticsRes(
+                        use.useAt.month().intValue(),
+                        use.status.when(UseStatus.USING).then(1)
+                                .when(UseStatus.RETURNED).then(1)
+                                .otherwise(0).sum()
+                ))
+                .from(use)
+                .where(use.user.eq(user)
+                        .and(use.useAt.after(oneYearAgo))
+                        .and(use.useAt.before(LocalDateTime.now())))
+                .groupBy(use.useAt.month())
+                .orderBy(use.useAt.month().asc())
+                .fetch();
+    }
+
+    public List<GetMonthlyReturnStatisticsRes> getMonthlyReturnStatistics(User user) {
+        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1);
+        return queryFactory
+                .select(new QGetMonthlyReturnStatisticsRes(
+                        use.returnTime.month().intValue(),
+                        use.status.when(UseStatus.RETURNED).then(1).otherwise(0).sum()
+                ))
+                .from(use)
+                .where(use.user.eq(user)
+                        .and(use.returnTime.after(oneYearAgo))
+                        .and(use.returnTime.before(LocalDateTime.now())))
+                .groupBy(use.returnTime.month())
+                .orderBy(use.returnTime.month().asc())
+                .fetch();
+    }
 
 }
 

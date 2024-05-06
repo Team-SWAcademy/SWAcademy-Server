@@ -2,10 +2,13 @@ package carbonneutral.academy.api.service.user;
 
 import carbonneutral.academy.api.controller.auth.dto.request.PatchAdditionalInfoReq;
 import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetDailyReturnStatisticsRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetDailyStatisticsRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetDailyUseStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyUseStatisticsRes;
 import carbonneutral.academy.api.controller.use.dto.response.GetMyPageRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyReturnStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyUseStatisticsRes;
 import carbonneutral.academy.api.converter.auth.AuthConverter;
 import carbonneutral.academy.api.converter.user.UserConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
@@ -44,9 +47,10 @@ public class UserServiceImpl implements UserService {
 
     public GetMyPageRes mypage(User user) {
         List<GetDailyStatisticsRes> dailyStatisticsResList = getDailyStatistics(user);
+        List<GetMonthlyStatisticsRes> monthlyStatisticsResList = getMonthlyStatistics(user);
         Point point = pointJpaRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
-        return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, point);
+        return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, monthlyStatisticsResList, point);
     }
 
 
@@ -82,6 +86,30 @@ public class UserServiceImpl implements UserService {
             return dayOfWeek - 1;
         }
     }
+
+    private List<GetMonthlyStatisticsRes> getMonthlyStatistics(User user) {
+        List<GetMonthlyUseStatisticsRes> monthlyUseStatistics = useQueryRepository.getMonthlyUseStatistics(user);
+        List<GetMonthlyReturnStatisticsRes> monthlyReturnStatistics = useQueryRepository.getMonthlyReturnStatistics(user);
+        Map<Integer, GetMonthlyStatisticsRes> statisticsMap = new HashMap<>();
+        for (int month = 1; month <= 12; month++) {
+            statisticsMap.put(month, new GetMonthlyStatisticsRes(month, 0, 0));
+        }
+
+        for (GetMonthlyUseStatisticsRes useStat : monthlyUseStatistics) {
+            GetMonthlyStatisticsRes monthlyStat = statisticsMap.get(useStat.getMonth());
+            monthlyStat.setUseCount(monthlyStat.getUseCount() + useStat.getUseCount());
+        }
+
+        for (GetMonthlyReturnStatisticsRes returnStat : monthlyReturnStatistics) {
+            GetMonthlyStatisticsRes monthlyStat = statisticsMap.get(returnStat.getMonth());
+            monthlyStat.setReturnCount(monthlyStat.getReturnCount() + returnStat.getReturnCount());
+        }
+        List<GetMonthlyStatisticsRes> monthlyStatisticsRes = new ArrayList<>(statisticsMap.values());
+        monthlyStatisticsRes.sort(Comparator.comparingInt(GetMonthlyStatisticsRes::getMonth));
+
+        return monthlyStatisticsRes;
+    }
+
 
 
 

@@ -1,6 +1,8 @@
 package carbonneutral.academy.api.controller.use.dto.response;
 
 
+import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyStatisticsRes;
+import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyStatisticsRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,4 +24,5 @@ public class GetMyPageRes {
     private int useCount;
     private int returnCount;
     private List<GetDailyStatisticsRes> dailyStatisticsResList;
+    private List<GetMonthlyStatisticsRes> monthlyStatisticsResList;
 }
