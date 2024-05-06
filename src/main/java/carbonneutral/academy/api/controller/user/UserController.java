@@ -3,6 +3,8 @@ package carbonneutral.academy.api.controller.user;
 import carbonneutral.academy.api.controller.auth.dto.request.PatchAdditionalInfoReq;
 import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
 import carbonneutral.academy.api.controller.use.dto.response.GetMyPageRes;
+import carbonneutral.academy.api.controller.user.dto.request.PatchInfoReq;
+import carbonneutral.academy.api.controller.user.dto.response.PatchInfoRes;
 import carbonneutral.academy.common.BaseResponse;
 import carbonneutral.academy.api.service.user.UserService;
 import carbonneutral.academy.domain.user.User;
@@ -14,8 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static carbonneutral.academy.common.code.status.SuccessStatus.ADDITIONAL_INFO_OK;
-import static carbonneutral.academy.common.code.status.SuccessStatus.MYPAGE_OK;
+import static carbonneutral.academy.common.code.status.SuccessStatus.*;
 
 @Slf4j
 @Tag(name = "user controller", description = "유저 관련 API")
@@ -32,10 +33,15 @@ public class UserController {
         return BaseResponse.of(ADDITIONAL_INFO_OK, userService.additionalInfo(user, request));
     }
 
-    //mypage
     @GetMapping("/my-page")
     @Operation(summary = "마이페이지 조회 API", description = "마이페이지를 조회합니다.")
     public BaseResponse<GetMyPageRes> mypage(@AuthenticationPrincipal User user) {
         return BaseResponse.of(MYPAGE_OK, userService.mypage(user));
+    }
+
+    @PatchMapping("/my-page/edit")
+    @Operation(summary = "마이페이지 수정 API", description = "마이페이지를 수정합니다.")
+    public BaseResponse<PatchInfoRes> mypageEdit(@AuthenticationPrincipal User user, @Validated @RequestBody PatchInfoReq request) {
+        return BaseResponse.of(MYPAGE_EDIT_OK, userService.mypageEdit(user, request));
     }
 }

@@ -9,7 +9,8 @@ import carbonneutral.academy.api.controller.use.dto.response.GetMyPageRes;
 import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyReturnStatisticsRes;
 import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyStatisticsRes;
 import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyUseStatisticsRes;
-import carbonneutral.academy.api.converter.auth.AuthConverter;
+import carbonneutral.academy.api.controller.user.dto.request.PatchInfoReq;
+import carbonneutral.academy.api.controller.user.dto.response.PatchInfoRes;
 import carbonneutral.academy.api.converter.user.UserConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.point.Point;
@@ -42,15 +43,24 @@ public class UserServiceImpl implements UserService {
         User updateUser = userJpaRepository.save(user);
         log.info("updateUser : {}", updateUser.getId());
 
-        return AuthConverter.toPatchAdditionalInfoRes(updateUser);
+        return UserConverter.toPatchAdditionalInfoRes(updateUser);
     }
 
+    @Override
     public GetMyPageRes mypage(User user) {
         List<GetDailyStatisticsRes> dailyStatisticsResList = getDailyStatistics(user);
         List<GetMonthlyStatisticsRes> monthlyStatisticsResList = getMonthlyStatistics(user);
         Point point = pointJpaRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
         return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, monthlyStatisticsResList, point);
+    }
+
+    @Override
+    @Transactional
+    public PatchInfoRes mypageEdit(User user, PatchInfoReq request) {
+        user.updateInfo(request);
+        User updateUser = userJpaRepository.save(user);
+        return UserConverter.toPatchInfoRes(updateUser);
     }
 
 
