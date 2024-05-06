@@ -1,7 +1,9 @@
 package carbonneutral.academy.common.config;
 
-import carbonneutral.academy.domain.user.repository.UserRepository;
+import carbonneutral.academy.domain.user.repository.UserJpaRepository;
 import carbonneutral.academy.utils.ApplicationAuditAware;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +24,11 @@ import static carbonneutral.academy.common.BaseEntity.State.ACTIVE;
 @RequiredArgsConstructor
 public class AppConfig {
 
-  private final UserRepository userRepository;
+  private final UserJpaRepository userJpaRepository;
 
   @Bean
   public UserDetailsService userDetailsService() {
-    return username -> userRepository.findByUsernameAndState(username, ACTIVE)
+    return username -> userJpaRepository.findByUsernameAndState(username, ACTIVE)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 
@@ -51,6 +53,11 @@ public class AppConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  JPAQueryFactory jpaQueryFactory(EntityManager em) {
+    return new JPAQueryFactory(em);
   }
 
 }

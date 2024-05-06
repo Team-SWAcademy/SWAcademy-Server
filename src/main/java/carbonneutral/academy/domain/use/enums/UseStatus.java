@@ -3,7 +3,7 @@ package carbonneutral.academy.domain.use.enums;
 public enum UseStatus {
 
     USING("이용중"),
-    USED("이용완료"),
+    RETURNED("반납완료"),
     CANCELED("이용취소"),
     EXPIRED("기간지남");
 
