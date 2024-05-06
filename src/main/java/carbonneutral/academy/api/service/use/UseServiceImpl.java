@@ -7,15 +7,15 @@ import carbonneutral.academy.api.converter.use.UseConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.location.Location;
 import carbonneutral.academy.domain.location.enums.LocationType;
-import carbonneutral.academy.domain.location.repository.LocationRepository;
+import carbonneutral.academy.domain.location.repository.LocationJpaRepository;
 import carbonneutral.academy.domain.mapping.LocationContainer;
-import carbonneutral.academy.domain.mapping.repository.LocationContainerRepository;
+import carbonneutral.academy.domain.mapping.repository.LocationContainerJpaRepository;
 import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
-import carbonneutral.academy.domain.multi_use_container.MultiUseContainerRepository;
+import carbonneutral.academy.domain.multi_use_container.MultiUseContainerJpaRepository;
 import carbonneutral.academy.domain.point.Point;
-import carbonneutral.academy.domain.point.repository.PointRepository;
+import carbonneutral.academy.domain.point.repository.PointJpaRepository;
 import carbonneutral.academy.domain.use.Use;
-import carbonneutral.academy.domain.use.repository.UseRepository;
+import carbonneutral.academy.domain.use.repository.UseJpaRepository;
 import carbonneutral.academy.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,42 +36,42 @@ import static carbonneutral.academy.domain.use.enums.UseStatus.*;
 @Transactional(readOnly = true)
 public class UseServiceImpl implements UseService {
 
-    private final UseRepository useRepository;
-    private final LocationRepository locationRepository;
-    private final MultiUseContainerRepository multiUseContainerRepository;
-    private final LocationContainerRepository locationContainerRepository;
-    private final PointRepository pointRepository;
+    private final UseJpaRepository useJpaRepository;
+    private final LocationJpaRepository locationJpaRepository;
+    private final MultiUseContainerJpaRepository multiUseContainerJpaRepository;
+    private final LocationContainerJpaRepository locationContainerJpaRepository;
+    private final PointJpaRepository pointJpaRepository;
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
-        List<GetUseRes> useResList = useRepository.findByUserIdAndStatus(user.getId(), USING).stream()
+        List<GetUseRes> useResList = useJpaRepository.findByUserIdAndStatus(user.getId(), USING).stream()
                 .map(use -> {
-                    Location location = locationRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
-                    MultiUseContainer multiUseContainer = multiUseContainerRepository.findById(use.getMultiUseContainerId()).orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
+                    Location location = locationJpaRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+                    MultiUseContainer multiUseContainer = multiUseContainerJpaRepository.findById(use.getMultiUseContainerId()).orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
                     return UseConverter.toGetUseRes(use, location, multiUseContainer);})
                 .toList();
-        Point point = pointRepository.findByUserId(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        Point point = pointJpaRepository.findByUserId(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_POINT));
         return UseConverter.toGetHomesRes(user, point, useResList);
     }
 
     @Override
     public GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt) {
         List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(useAt);
-        Use use = useRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
+        Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE));
-        MultiUseContainer multiUseContainer = multiUseContainerRepository.findById(use.getMultiUseContainerId())
+        MultiUseContainer multiUseContainer = multiUseContainerJpaRepository.findById(use.getMultiUseContainerId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
-        Location location = locationRepository.findById(use.getRentalLocation().getId())
+        Location location = locationJpaRepository.findById(use.getRentalLocation().getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
-        List<Integer> locationIds = locationContainerRepository.findByMultiUseContainerId(use.getMultiUseContainerId())
+        List<Integer> locationIds = locationContainerJpaRepository.findByMultiUseContainerId(use.getMultiUseContainerId())
                 .stream()
                 .map(LocationContainer::getLocationId)
                 .toList();
-        List<GetReturnRes> returnResList1 = locationRepository.findByIdInAndLocationType(locationIds, LocationType.RETURN)
+        List<GetReturnRes> returnResList1 = locationJpaRepository.findByIdInAndLocationType(locationIds, LocationType.RETURN)
                 .stream()
                 .map(UseConverter::toGetReturnRes)
                 .toList();
-        List<GetReturnRes> returnResList2 = locationRepository.findByIdInAndIsReturnedAndLocationType(locationIds, true, location.getLocationType())
+        List<GetReturnRes> returnResList2 = locationJpaRepository.findByIdInAndIsReturnedAndLocationType(locationIds, true, location.getLocationType())
                 .stream()
                 .map(UseConverter::toGetReturnRes)
                 .toList();
@@ -83,10 +83,10 @@ public class UseServiceImpl implements UseService {
     @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
-        Location location = locationRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
+        Location location = locationJpaRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
         Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
-        useRepository.save(use);
+        useJpaRepository.save(use);
         return UseConverter.toPostUseRes(use);
     }
 }

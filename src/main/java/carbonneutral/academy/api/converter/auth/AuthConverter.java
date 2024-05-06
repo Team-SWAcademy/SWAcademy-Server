@@ -31,12 +31,7 @@ public class AuthConverter {
 
     }
 
-    public static PatchAdditionalInfoRes toPatchAdditionalInfoRes(User user) {
-        return PatchAdditionalInfoRes.builder()
-                .id(user.getId())
-                .isFinished(user.isFinished())
-                .build();
-    }
+
 
     public static Point toPoint(User user) {
         return Point.builder()
