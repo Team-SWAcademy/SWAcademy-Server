@@ -5,10 +5,10 @@ import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.api.converter.auth.AuthConverter;
 import carbonneutral.academy.api.service.auth.social.kakao.KakaoLoginService;
 import carbonneutral.academy.common.exceptions.BaseException;
-import carbonneutral.academy.domain.point.repository.PointRepository;
+import carbonneutral.academy.domain.point.repository.PointJpaRepository;
 import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.enums.SocialType;
-import carbonneutral.academy.domain.user.repository.UserRepository;
+import carbonneutral.academy.domain.user.repository.UserJpaRepository;
 import carbonneutral.academy.utils.RedisProvider;
 import carbonneutral.academy.utils.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_USER
 @Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
-    private final PointRepository pointRepository;
+    private final UserJpaRepository userJpaRepository;
+    private final PointJpaRepository pointJpaRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
@@ -45,14 +45,14 @@ public class AuthServiceImpl implements AuthService {
             case KAKAO: {
                 GetKakaoRes getKakaoRes = kakaoLoginService.getUserInfo(kakaoLoginService.getAccessToken(authorizationCode));
 
-                boolean isRegistered = userRepository.existsByUsernameAndSocialTypeAndState(getKakaoRes.getId(), SocialType.KAKAO, ACTIVE);
+                boolean isRegistered = userJpaRepository.existsByUsernameAndSocialTypeAndState(getKakaoRes.getId(), SocialType.KAKAO, ACTIVE);
 
                 if (!isRegistered) {
                     User user = AuthConverter.toUser(getKakaoRes);
-                    pointRepository.save(AuthConverter.toPoint(user));
-                    userRepository.save(user);
+                    pointJpaRepository.save(AuthConverter.toPoint(user));
+                    userJpaRepository.save(user);
                 }
-                User user = userRepository.findByUsernameAndState(getKakaoRes.getId(), ACTIVE)
+                User user = userJpaRepository.findByUsernameAndState(getKakaoRes.getId(), ACTIVE)
                         .orElseThrow(() -> new BaseException(NOT_FIND_USER));
                 String accessToken = jwtProvider.generateToken(user);
                 String refreshToken = jwtProvider.generateRefreshToken(user);

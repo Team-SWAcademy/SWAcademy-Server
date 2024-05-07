@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static carbonneutral.academy.common.BaseEntity.*;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserJpaRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUsernameAndState(String username, State state);
 
