@@ -1,5 +1,6 @@
 package carbonneutral.academy.api.service.use;
 
+import carbonneutral.academy.api.controller.use.dto.request.PatchReturnReq;
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
 import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.api.converter.time.TimeConverter;
@@ -88,5 +89,29 @@ public class UseServiceImpl implements UseService {
         Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
         useJpaRepository.save(use);
         return UseConverter.toPostUseRes(use);
+    }
+
+    @Override
+    @Transactional
+    public PatchReturnRes returnMultipleTimeContainers(User user, PatchReturnReq patchReturnReq, String usetAt) {
+        List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(usetAt);
+        Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
+                .orElseThrow(() -> new BaseException(NOT_FIND_USE));
+        Location returnLocation = locationJpaRepository.findByNameAndAddressAndState(patchReturnReq.getLocationName(), patchReturnReq.getLocationAddress(), ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        if(!(returnLocation.getLocationType().equals(LocationType.RETURN)) || !(returnLocation.isReturned())) {
+            throw new BaseException(NOT_RETURN_LOCATION);
+        }
+        if(!locationContainerJpaRepository.findByLocation_Id(returnLocation.getId())
+                .stream()
+                .map(locationContainer -> locationContainer.getMultiUseContainer().getId())
+                .toList().contains(use.getMultiUseContainerId())) {
+            throw new BaseException(NOT_RETURN_LOCATION);
+        }
+        use.setReturnLocation(returnLocation);
+        Point userPoint = pointJpaRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        userPoint.addPoint(use.getPoint());
+        return UseConverter.toPatchReturnRes(user, returnLocation, use);
     }
 }
