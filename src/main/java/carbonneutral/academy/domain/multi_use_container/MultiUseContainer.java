@@ -20,4 +20,7 @@ public class MultiUseContainer {
     @Column(nullable = false, length = 20)
     private String type;
 
+    @Column(nullable = false, length = 200, name = "image_url")
+    private String imageUrl;
+
 }

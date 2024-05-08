@@ -24,4 +24,9 @@ public class TimeConverter {
         LocalDateTime endRange = dateTime.withNano(999999999);
         return List.of(startRange, endRange);
     }
+
+    public static String toMonthDayString(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일");
+        return localDateTime.format(formatter);
+    }
 }
