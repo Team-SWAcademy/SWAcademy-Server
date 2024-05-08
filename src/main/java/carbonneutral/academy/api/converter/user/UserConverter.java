@@ -1,11 +1,14 @@
 package carbonneutral.academy.api.converter.user;
 
 import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
+import carbonneutral.academy.api.controller.use.dto.response.PatchReturnRes;
 import carbonneutral.academy.api.controller.use.dto.response.statistics.daily.GetDailyStatisticsRes;
 import carbonneutral.academy.api.controller.use.dto.response.GetMyPageRes;
 import carbonneutral.academy.api.controller.use.dto.response.statistics.monthly.GetMonthlyStatisticsRes;
 import carbonneutral.academy.api.controller.user.dto.response.PatchInfoRes;
+import carbonneutral.academy.domain.location.Location;
 import carbonneutral.academy.domain.point.Point;
+import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.user.User;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -38,5 +41,7 @@ public class UserConverter {
                 .editNickname(user.getNickname())
                 .build();
     }
+
+
 
 }
