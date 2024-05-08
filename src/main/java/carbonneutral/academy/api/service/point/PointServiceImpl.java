@@ -36,9 +36,9 @@ public class PointServiceImpl implements PointService {
                     .orElseThrow(() -> new BaseException(ErrorStatus.NOT_FIND_MULTI_USE_CONTAINER));
             return (GetBasePointRes)GetAccumulatePointRes.builder()
                     .rentalLocationName(use.getRentalLocation().getName())
-                    .rentalLocationAddress(use.getReturnLocation().getAddress())
-                    .returnLocationName(use.getRentalLocation().getName())
-                    .returnLocationAddress(use.getRentalLocation().getAddress())
+                    .rentalLocationAddress(use.getRentalLocation().getAddress())
+                    .returnLocationName(use.getReturnLocation().getName())
+                    .returnLocationAddress(use.getReturnLocation().getAddress())
                     .useAt(TimeConverter.toMonthDayString(use.getUseAt()))
                     .point(use.getPoint())
                     .pointTypeImageUrl(multiUseContainer.getImageUrl())
