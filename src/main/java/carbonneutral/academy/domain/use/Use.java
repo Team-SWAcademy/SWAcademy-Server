@@ -48,4 +48,9 @@ public class Use {
     private UseStatus status;
 
 
+    public void setReturnLocation(Location returnLocation) {
+        this.returnLocation = returnLocation;
+        this.returnTime = LocalDateTime.now();
+        this.status = UseStatus.RETURNED;
+    }
 }

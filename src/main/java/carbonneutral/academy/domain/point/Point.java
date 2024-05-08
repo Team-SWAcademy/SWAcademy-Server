@@ -29,4 +29,8 @@ public class Point {
 
     @Column(nullable = false, name = "utilized_point")
     private int utilizedPoint;
+
+    public void addPoint(int point) {
+        this.accumulatedPoint += point;
+    }
 }

@@ -23,7 +23,8 @@ public enum SuccessStatus implements BaseCode {
     USE_SAVE_OK(HttpStatus.CREATED, "USE2000", "이용 성공"),
     //이용중인 다회용기 조회 성공
     IN_USES_OK(HttpStatus.OK, "USE2001", "이용중인 다회용기 조회 성공"),
-    IN_USE_OK(HttpStatus.OK, "USE2002", "이용중인 다회용기 단일 조회 성공" );
+    IN_USE_OK(HttpStatus.OK, "USE2002", "이용중인 다회용기 단일 조회 성공" ),
+    RETURN_SAVE_OK(HttpStatus.CREATED, "USE2003", "반납 성공");
 
     private final HttpStatus httpStatus;
     private final String code;
