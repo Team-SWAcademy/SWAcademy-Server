@@ -14,13 +14,17 @@ public enum SuccessStatus implements BaseCode {
     OK(HttpStatus.OK, "COMMON2000", "성공입니다."),
 
     OAUTH_OK(HttpStatus.OK, "USER2003", "소셜 로그인 성공"),
-    ONBOARDING_OK(HttpStatus.OK, "USER2004", "온보딩 성공"),
+    //추가정보 입력 성공
+    ADDITIONAL_INFO_OK(HttpStatus.OK, "USER2004", "추가정보 입력 성공"),
+    MYPAGE_OK(HttpStatus.OK, "USER2005", "마이페이지 조회 성공"),
+    MYPAGE_EDIT_OK(HttpStatus.OK, "USER2006", "마이페이지 정보 성공"),
 
     //이용성공
     USE_SAVE_OK(HttpStatus.CREATED, "USE2000", "이용 성공"),
     //이용중인 다회용기 조회 성공
-    IN_USES_OK(HttpStatus.OK, "USE2001", "이용중인 다회용기 조회 성공")
-    ;
+    IN_USES_OK(HttpStatus.OK, "USE2001", "이용중인 다회용기 조회 성공"),
+    IN_USE_OK(HttpStatus.OK, "USE2002", "이용중인 다회용기 단일 조회 성공" ),
+    RETURN_SAVE_OK(HttpStatus.CREATED, "USE2003", "반납 성공");
 
     private final HttpStatus httpStatus;
     private final String code;

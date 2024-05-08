@@ -1,25 +1,35 @@
 package carbonneutral.academy.api.service.use;
 
+import carbonneutral.academy.api.controller.use.dto.request.PatchReturnReq;
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
-import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetUseRes;
-import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
+import carbonneutral.academy.api.controller.use.dto.response.*;
+import carbonneutral.academy.api.converter.time.TimeConverter;
 import carbonneutral.academy.api.converter.use.UseConverter;
 import carbonneutral.academy.common.exceptions.BaseException;
-import carbonneutral.academy.domain.cafe.Cafe;
-import carbonneutral.academy.domain.cafe.repository.CafeRepository;
+import carbonneutral.academy.domain.location.Location;
+import carbonneutral.academy.domain.location.enums.LocationType;
+import carbonneutral.academy.domain.location.repository.LocationJpaRepository;
+import carbonneutral.academy.domain.mapping.LocationContainer;
+import carbonneutral.academy.domain.mapping.repository.LocationContainerJpaRepository;
+import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
+import carbonneutral.academy.domain.multi_use_container.MultiUseContainerJpaRepository;
+import carbonneutral.academy.domain.point.Point;
+import carbonneutral.academy.domain.point.repository.PointJpaRepository;
 import carbonneutral.academy.domain.use.Use;
-import carbonneutral.academy.domain.use.repository.UseRepository;
+import carbonneutral.academy.domain.use.repository.UseJpaRepository;
 import carbonneutral.academy.domain.user.User;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_CAFE;
+import static carbonneutral.academy.common.BaseEntity.State.*;
+import static carbonneutral.academy.common.code.status.ErrorStatus.*;
+import static carbonneutral.academy.domain.use.enums.UseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,26 +37,81 @@ import static carbonneutral.academy.common.code.status.ErrorStatus.NOT_FIND_CAFE
 @Transactional(readOnly = true)
 public class UseServiceImpl implements UseService {
 
-    private final UseRepository useRepository;
-    private final CafeRepository cafeRepository;
+    private final UseJpaRepository useJpaRepository;
+    private final LocationJpaRepository locationJpaRepository;
+    private final MultiUseContainerJpaRepository multiUseContainerJpaRepository;
+    private final LocationContainerJpaRepository locationContainerJpaRepository;
+    private final PointJpaRepository pointJpaRepository;
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
-        List<GetUseRes> useResList = useRepository.findByUserIdAndIsInUse(user.getId(), true).stream()
+        List<GetUseRes> useResList = useJpaRepository.findByUserIdAndStatus(user.getId(), USING).stream()
                 .map(use -> {
-                    Cafe cafe = cafeRepository.findById(use.getCafeId()).orElseThrow(() -> new BaseException(NOT_FIND_CAFE));
-                    return UseConverter.toGetUseRes(use, cafe);})
+                    Location location = locationJpaRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+                    MultiUseContainer multiUseContainer = multiUseContainerJpaRepository.findById(use.getMultiUseContainerId()).orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
+                    return UseConverter.toGetUseRes(use, location, multiUseContainer);})
                 .toList();
-        return UseConverter.toGetHomesRes(user, useResList);
+        Point point = pointJpaRepository.findByUserId(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        return UseConverter.toGetHomesRes(user, point, useResList);
+    }
+
+    @Override
+    public GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt) {
+        List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(useAt);
+        Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
+                .orElseThrow(() -> new BaseException(NOT_FIND_USE));
+        MultiUseContainer multiUseContainer = multiUseContainerJpaRepository.findById(use.getMultiUseContainerId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
+        Location location = locationJpaRepository.findById(use.getRentalLocation().getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        List<Integer> locationIds = locationContainerJpaRepository.findByMultiUseContainerId(use.getMultiUseContainerId())
+                .stream()
+                .map(LocationContainer::getLocationId)
+                .toList();
+        List<GetReturnRes> returnResList1 = locationJpaRepository.findByIdInAndLocationType(locationIds, LocationType.RETURN)
+                .stream()
+                .map(UseConverter::toGetReturnRes)
+                .toList();
+        List<GetReturnRes> returnResList2 = locationJpaRepository.findByIdInAndIsReturnedAndLocationType(locationIds, true, location.getLocationType())
+                .stream()
+                .map(UseConverter::toGetReturnRes)
+                .toList();
+        List<GetReturnRes> returnResList = Stream.concat(returnResList1.stream(), returnResList2.stream())
+                .toList();
+        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getType());
     }
 
     @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
-        Cafe cafe = cafeRepository.findByNameAndLocation(postUseReq.getCafeName(), postUseReq.getCafeLocation())
-                .orElseThrow(() -> new BaseException(NOT_FIND_CAFE));
-        Use use = UseConverter.toUse(user, cafe, postUseReq.getPoint());
-        useRepository.save(use);
+        Location location = locationJpaRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
+        useJpaRepository.save(use);
         return UseConverter.toPostUseRes(use);
+    }
+
+    @Override
+    @Transactional
+    public PatchReturnRes returnMultipleTimeContainers(User user, PatchReturnReq patchReturnReq, String usetAt) {
+        List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(usetAt);
+        Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
+                .orElseThrow(() -> new BaseException(NOT_FIND_USE));
+        Location returnLocation = locationJpaRepository.findByNameAndAddressAndState(patchReturnReq.getLocationName(), patchReturnReq.getLocationAddress(), ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        if(!(returnLocation.getLocationType().equals(LocationType.RETURN)) || !(returnLocation.isReturned())) {
+            throw new BaseException(NOT_RETURN_LOCATION);
+        }
+        if(!locationContainerJpaRepository.findByLocation_Id(returnLocation.getId())
+                .stream()
+                .map(locationContainer -> locationContainer.getMultiUseContainer().getId())
+                .toList().contains(use.getMultiUseContainerId())) {
+            throw new BaseException(NOT_RETURN_LOCATION);
+        }
+        use.setReturnLocation(returnLocation);
+        Point userPoint = pointJpaRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        userPoint.addPoint(use.getPoint());
+        return UseConverter.toPatchReturnRes(user, returnLocation, use);
     }
 }

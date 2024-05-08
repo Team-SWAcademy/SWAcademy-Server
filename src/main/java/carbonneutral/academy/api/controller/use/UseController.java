@@ -1,7 +1,10 @@
 package carbonneutral.academy.api.controller.use;
 
+import carbonneutral.academy.api.controller.use.dto.request.PatchReturnReq;
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
 import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
+import carbonneutral.academy.api.controller.use.dto.response.GetUseDetailRes;
+import carbonneutral.academy.api.controller.use.dto.response.PatchReturnRes;
 import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
 import carbonneutral.academy.api.service.use.UseService;
 import carbonneutral.academy.common.BaseResponse;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 
 
 import static carbonneutral.academy.common.code.status.SuccessStatus.*;
@@ -33,10 +37,23 @@ public class UseController {
         return BaseResponse.of(IN_USES_OK, useService.getInUsesMultipleTimeContainers(user));
     }
 
+    @GetMapping("{useAt}")
+    @Operation(summary = "유저가 이용중인 다회용기 단일 조회 API",description = "유저가 이용중인 다회용기를 단일 조회합니다.")
+    BaseResponse<GetUseDetailRes> getInUseMultipleTimeContainer(@AuthenticationPrincipal User user, @PathVariable("useAt") String useAt) {
+        return BaseResponse.of(IN_USE_OK, useService.getInUseMultipleTimeContainer(user, useAt));
+    }
+
     @PostMapping
-    @Operation(summary = "카페에서 다회용기 이용 시 API",description = "앱에서 QR 인증을 통해 카페에서 다회용기를 이용합니다.")
+    @Operation(summary = "다회용기 이용 시 API",description = "앱에서 QR 인증을 통해 다회용기를 이용합니다.")
     BaseResponse<PostUseRes> useMultipleTimeContainers(@AuthenticationPrincipal User user,
                                                        @Validated @RequestBody PostUseReq postUseReq) {
         return BaseResponse.of(USE_SAVE_OK, useService.useMultipleTimeContainers(user, postUseReq));
+    }
+
+    @PatchMapping("{useAt}")
+    @Operation(summary = "다회용기 반납 API", description = "앱에서 QR 인증을 통해 다회용기를 반납합니다.")
+    BaseResponse<PatchReturnRes> returnMultipleTimeContainers(@AuthenticationPrincipal User user,
+                                                              @Validated @RequestBody PatchReturnReq patchReturnReq, @PathVariable("useAt") String useAt) {
+        return BaseResponse.of(RETURN_SAVE_OK, useService.returnMultipleTimeContainers(user, patchReturnReq, useAt));
     }
 }

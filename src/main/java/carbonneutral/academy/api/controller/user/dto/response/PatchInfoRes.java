@@ -1,4 +1,4 @@
-package carbonneutral.academy.api.controller.auth.dto.response;
+package carbonneutral.academy.api.controller.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class PatchOnboardingRes {
+public class PatchInfoRes {
 
-    private int id;
-    private boolean isFinished;
+    private String editNickname;
+
+
 }

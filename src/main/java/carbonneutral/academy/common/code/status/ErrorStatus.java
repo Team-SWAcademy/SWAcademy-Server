@@ -27,8 +27,15 @@ public enum ErrorStatus implements BaseErrorCode {
     EXIST_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "USER4005", "이미 존재하는 전화번호입니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "USER4006", "핸드폰 번호 양식에 맞지 않습니다. 예시: +82-10-0000-0000"),
 
-    //카페가 존재하지 않음
-    NOT_FIND_CAFE(HttpStatus.NOT_FOUND, "CAFE4000", "존재하지 않는 카페입니다."),
+    NOT_FIND_LOCATION(HttpStatus.NOT_FOUND, "LOCATION4000", "존재하지 않는 위치입니다."),
+    NOT_RETURN_LOCATION(HttpStatus.BAD_REQUEST, "LOCATION4001", "반납할 수 있는 위치가 아닙니다."),
+    //USE
+    NOT_FIND_USE(HttpStatus.NOT_FOUND, "USE4000", "존재하지 않는 이용내역입니다."),
+
+    //MULTI_USE_CONTAINER
+    NOT_FIND_MULTI_USE_CONTAINER(HttpStatus.NOT_FOUND, "MULTI_USE_CONTAINER4000", "존재하지 않는 다회용기입니다."),
+
+    NOT_FIND_POINT(HttpStatus.NOT_FOUND, "POINT4000", "존재하지 않는 포인트입니다."),
 
     EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4000", "JWT를 입력해주세요"),
     INVALID_JWT(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT입니다."),
@@ -39,6 +46,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     INVALID_OAUTH_TYPE(HttpStatus.BAD_REQUEST, "OAUTH4000", "알 수 없는 소셜 로그인 형식입니다."),
 
+
     /**
      * 500 :  Database, Server 오류
      */
@@ -47,8 +55,8 @@ public enum ErrorStatus implements BaseErrorCode {
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5002", "서버와의 연결에 실패하였습니다."),
     PASSWORD_ENCRYPTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5003", "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5004", "비밀번호 복호화에 실패하였습니다"),
-    UNEXPECTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5005", "예상치 못한 에러가 발생했습니다.")
-    ;
+    UNEXPECTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5005", "예상치 못한 에러가 발생했습니다.");
+
 
 
     private final HttpStatus httpStatus;
