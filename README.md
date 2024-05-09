@@ -36,7 +36,7 @@
 <img width="675" alt="아키텍처" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/aae0f908-c6a7-456b-8161-406ac16e0baa">
 
 ## 📜 API Docs
-<a href="[https://example.com/api/docs](https://holy-ulna-79c.notion.site/API-d6649045e52b4510843b0c6d52c41c3d?pvs=4)">🔗 API Docs</a>
+<a href="https://holy-ulna-79c.notion.site/API-d6649045e52b4510843b0c6d52c41c3d?pvs=4">🔗 API Docs</a>
 
 ## ☁️ERD
 <img width="675" alt="erd" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/2d7e7110-1bdc-42d5-b754-28822234851a">
