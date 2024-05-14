@@ -5,7 +5,6 @@ import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
 import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.domain.user.User;
 
-import java.time.LocalDateTime;
 
 public interface UseService {
 
@@ -15,4 +14,6 @@ public interface UseService {
     GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt);
 
     PatchReturnRes returnMultipleTimeContainers(User user, PatchReturnReq patchReturnReq, String useAt);
+
+    GetLocationRes getLocation(int locationId, int point);
 }

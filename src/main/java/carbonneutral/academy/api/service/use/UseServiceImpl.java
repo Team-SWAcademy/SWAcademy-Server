@@ -80,18 +80,39 @@ public class UseServiceImpl implements UseService {
                 .toList();
         List<GetReturnRes> returnResList = Stream.concat(returnResList1.stream(), returnResList2.stream())
                 .toList();
-        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getType());
+        return UseConverter.toGetUseDetailRes(use, location, returnResList, multiUseContainer.getId());
     }
 
     @Override
+    public GetLocationRes getLocation(int locationId, int point) {
+        Location location = locationJpaRepository.findById(locationId).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        if(location.getLocationType().equals(LocationType.RETURN)) {
+            throw new BaseException(NOT_USE_LOCATION);
+        }
+        List<Integer> multiUseContainerIdList = locationContainerJpaRepository.findByLocation_Id(location.getId())
+                .stream()
+                .map(LocationContainer::getMultiUseContainer)
+                .map(MultiUseContainer::getId)
+                .toList();
+        return UseConverter.toGetLocationRes(location, multiUseContainerIdList,point);
+    }
+    @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
-        Location location = locationJpaRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
+        Location location = locationJpaRepository.findByIdAndState(postUseReq.getLocationId(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        List<Integer> multiUseContainerIdList = locationContainerJpaRepository.findByLocation_Id(location.getId())
+                .stream()
+                .map(LocationContainer::getMultiUseContainer)
+                .map(MultiUseContainer::getId)
+                .toList();
+        if(!multiUseContainerIdList.contains(postUseReq.getMultiUseContainerId())) {
+            throw new BaseException(NOT_USE_LOCATION);
+        }
         Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
         useJpaRepository.save(use);
         useStatisticsJpaRepository.findById(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS)).addTotalUseCount();
-        return UseConverter.toPostUseRes(use);
+        return UseConverter.toPostUseRes(use, location);
     }
 
     @Override
@@ -100,7 +121,7 @@ public class UseServiceImpl implements UseService {
         List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(usetAt);
         Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE));
-        Location returnLocation = locationJpaRepository.findByNameAndAddressAndState(patchReturnReq.getLocationName(), patchReturnReq.getLocationAddress(), ACTIVE)
+        Location returnLocation = locationJpaRepository.findByIdAndState(patchReturnReq.getReturnLocationId(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
         if(!(returnLocation.getLocationType().equals(LocationType.RETURN)) || !(returnLocation.isReturned())) {
             throw new BaseException(NOT_RETURN_LOCATION);
@@ -118,6 +139,6 @@ public class UseServiceImpl implements UseService {
         useStatisticsJpaRepository.findById(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS))
                 .addTotalReturnCount();
-        return UseConverter.toPatchReturnRes(user, returnLocation, use);
+        return UseConverter.toPatchReturnRes(user, returnLocation, use, userPoint);
     }
 }
