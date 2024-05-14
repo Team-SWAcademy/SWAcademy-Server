@@ -15,4 +15,6 @@ public interface UseService {
     GetUseDetailRes getInUseMultipleTimeContainer(User user, String useAt);
 
     PatchReturnRes returnMultipleTimeContainers(User user, PatchReturnReq patchReturnReq, String useAt);
+
+    GetLocationRes getLocation(int locationId);
 }

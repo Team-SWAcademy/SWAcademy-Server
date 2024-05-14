@@ -84,6 +84,19 @@ public class UseServiceImpl implements UseService {
     }
 
     @Override
+    public GetLocationRes getLocation(int locationId) {
+        Location location = locationJpaRepository.findById(locationId).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        if(location.getLocationType().equals(LocationType.RETURN)) {
+            throw new BaseException(NOT_USE_LOCATION);
+        }
+        List<Integer> multiUseContainerIdList = locationContainerJpaRepository.findByLocation_Id(location.getId())
+                .stream()
+                .map(LocationContainer::getMultiUseContainer)
+                .map(MultiUseContainer::getId)
+                .toList();
+        return UseConverter.toGetLocationRes(location, multiUseContainerIdList);
+    }
+    @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
         Location location = locationJpaRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)

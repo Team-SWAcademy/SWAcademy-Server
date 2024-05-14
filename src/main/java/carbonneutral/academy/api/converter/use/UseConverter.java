@@ -97,4 +97,15 @@ public class UseConverter {
                 .status(use.getStatus())
                 .build();
     }
+
+    public static GetLocationRes toGetLocationRes(Location location, List<Integer> multiUseContainerIdList) {
+        return GetLocationRes.builder()
+                .locationName(location.getName())
+                .locationAddress(location.getAddress())
+                .locationImageUrl(location.getImageUrl())
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
+                .multiUseContainerIdList(multiUseContainerIdList)
+                .build();
+    }
 }
