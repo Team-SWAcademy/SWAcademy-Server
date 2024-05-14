@@ -11,18 +11,16 @@ import lombok.*;
 @Getter
 @Builder
 @Entity
+@IdClass(LocationContainerId.class)
 @Table(name = "location_container")
 public class LocationContainer {
 
     @Id
-    @Column(name = "location_container_id", nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
     private Location location;
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "multi_use_container_id")
     private MultiUseContainer multiUseContainer;

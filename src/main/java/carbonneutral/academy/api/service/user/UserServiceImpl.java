@@ -16,6 +16,8 @@ import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.point.Point;
 import carbonneutral.academy.domain.point.repository.PointJpaRepository;
 import carbonneutral.academy.domain.use.repository.UseQueryRepository;
+import carbonneutral.academy.domain.use_statistics.UseStatistics;
+import carbonneutral.academy.domain.use_statistics.repository.UseStatisticsJpaRepository;
 import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final UserJpaRepository userJpaRepository;
     private final UseQueryRepository useQueryRepository;
     private final PointJpaRepository pointJpaRepository;
+    private final UseStatisticsJpaRepository useStatisticsJpaRepository;
     @Override
     @Transactional
     public PatchAdditionalInfoRes additionalInfo(User user, PatchAdditionalInfoReq request) {
@@ -52,7 +55,9 @@ public class UserServiceImpl implements UserService {
         List<GetMonthlyStatisticsRes> monthlyStatisticsResList = getMonthlyStatistics(user);
         Point point = pointJpaRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
-        return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, monthlyStatisticsResList, point);
+        UseStatistics useStatistics = useStatisticsJpaRepository.findById(user.getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
+        return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, monthlyStatisticsResList, point, useStatistics);
     }
 
     @Override

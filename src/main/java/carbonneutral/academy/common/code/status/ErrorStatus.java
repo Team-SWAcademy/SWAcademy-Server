@@ -36,7 +36,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FIND_MULTI_USE_CONTAINER(HttpStatus.NOT_FOUND, "MULTI_USE_CONTAINER4000", "존재하지 않는 다회용기입니다."),
 
     NOT_FIND_POINT(HttpStatus.NOT_FOUND, "POINT4000", "존재하지 않는 포인트입니다."),
-
+    NOT_FIND_USE_STATISTICS(HttpStatus.NOT_FOUND, "USE_STATISTICS4000", "존재하지 않는 이용 통계입니다."),
     EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4000", "JWT를 입력해주세요"),
     INVALID_JWT(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(HttpStatus.FORBIDDEN, "JWT4002", "권한이 없는 유저의 접근입니다."),
@@ -60,6 +60,7 @@ public enum ErrorStatus implements BaseErrorCode {
     PASSWORD_ENCRYPTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5003", "비밀번호 암호화에 실패하였습니다."),
     PASSWORD_DECRYPTION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5004", "비밀번호 복호화에 실패하였습니다"),
     UNEXPECTED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5005", "예상치 못한 에러가 발생했습니다.");
+
 
 
 
