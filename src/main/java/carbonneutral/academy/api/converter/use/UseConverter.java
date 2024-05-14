@@ -30,12 +30,17 @@ public class UseConverter {
                 .build();
     }
 
-    public static PostUseRes toPostUseRes(Use use) {
+    public static PostUseRes toPostUseRes(Use use, Location location) {
         return PostUseRes.builder()
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
                 .userId(use.getUser().getId())
-                .locationId(use.getRentalLocation().getId())
+                .locationId(location.getId())
+                .locationName(location.getName())
+                .locationAddress(location.getAddress())
+                .locationImageUrl(location.getImageUrl())
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
                 .multiUseContainerId(use.getMultiUseContainerId())
                 .status(use.getStatus())
                 .build();
@@ -100,6 +105,7 @@ public class UseConverter {
 
     public static GetLocationRes toGetLocationRes(Location location, List<Integer> multiUseContainerIdList, int point) {
         return GetLocationRes.builder()
+                .locationId(location.getId())
                 .locationName(location.getName())
                 .locationAddress(location.getAddress())
                 .locationImageUrl(location.getImageUrl())

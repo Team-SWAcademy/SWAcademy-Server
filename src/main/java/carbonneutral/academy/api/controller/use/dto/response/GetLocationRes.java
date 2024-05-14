@@ -13,6 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class GetLocationRes {
+    private int locationId;
     private String locationName;
     private String locationAddress;
     private String locationImageUrl;

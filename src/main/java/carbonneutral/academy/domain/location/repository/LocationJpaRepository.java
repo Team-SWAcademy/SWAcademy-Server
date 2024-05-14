@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface LocationJpaRepository extends JpaRepository<Location, Integer>{
 
+    Optional<Location> findByIdAndState(int locationId, BaseEntity.State state);
     Optional<Location> findByNameAndAddressAndState (String name, String address, BaseEntity.State state);
 
     List<Location> findByIdInAndLocationType(List<Integer> locationIds, LocationType locationType);

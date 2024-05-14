@@ -99,12 +99,20 @@ public class UseServiceImpl implements UseService {
     @Override
     @Transactional
     public PostUseRes useMultipleTimeContainers(User user, PostUseReq postUseReq) {
-        Location location = locationJpaRepository.findByNameAndAddressAndState(postUseReq.getLocationName(), postUseReq.getLocationAddress(), ACTIVE)
+        Location location = locationJpaRepository.findByIdAndState(postUseReq.getLocationId(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
+        List<Integer> multiUseContainerIdList = locationContainerJpaRepository.findByLocation_Id(location.getId())
+                .stream()
+                .map(LocationContainer::getMultiUseContainer)
+                .map(MultiUseContainer::getId)
+                .toList();
+        if(!multiUseContainerIdList.contains(postUseReq.getMultiUseContainerId())) {
+            throw new BaseException(NOT_USE_LOCATION);
+        }
         Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
         useJpaRepository.save(use);
         useStatisticsJpaRepository.findById(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS)).addTotalUseCount();
-        return UseConverter.toPostUseRes(use);
+        return UseConverter.toPostUseRes(use, location);
     }
 
     @Override
