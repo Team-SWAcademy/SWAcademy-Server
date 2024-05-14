@@ -1,13 +1,11 @@
 package carbonneutral.academy.api.converter.time;
 
-import jakarta.persistence.Tuple;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TimeConverter {
@@ -26,7 +24,7 @@ public class TimeConverter {
     }
 
     public static String toMonthDayString(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일");
         return localDateTime.format(formatter);
     }
 }
