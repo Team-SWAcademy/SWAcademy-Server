@@ -48,7 +48,7 @@ public class UseConverter {
                 .locationName(location.getName())
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .status(use.getStatus())
-                .multiUseContainerType(multiUseContainer.getType())
+                .multiUseContainerId(multiUseContainer.getId())
                 .build();
     }
 
@@ -75,7 +75,7 @@ public class UseConverter {
                 .build();
     }
 
-    public static GetUseDetailRes toGetUseDetailRes(Use use, Location location, List<GetReturnRes> getReturnResList, String multiUseContainer) {
+    public static GetUseDetailRes toGetUseDetailRes(Use use, Location location, List<GetReturnRes> getReturnResList, int multiUseContainerId) {
         return GetUseDetailRes.builder()
                 .rentalLocationId(location.getId())
                 .locationImageUrl(location.getImageUrl())
@@ -83,7 +83,7 @@ public class UseConverter {
                 .locationAddress(location.getAddress())
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
-                .multiUseContainer(multiUseContainer)
+                .multiUseContainerId(multiUseContainerId)
                 .getReturnResList(getReturnResList)
                 .build();
     }
