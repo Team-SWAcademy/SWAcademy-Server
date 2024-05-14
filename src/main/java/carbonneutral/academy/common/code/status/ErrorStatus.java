@@ -29,6 +29,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_FIND_LOCATION(HttpStatus.NOT_FOUND, "LOCATION4000", "존재하지 않는 위치입니다."),
     NOT_RETURN_LOCATION(HttpStatus.BAD_REQUEST, "LOCATION4001", "반납할 수 있는 위치가 아닙니다."),
+    NOT_USE_LOCATION(HttpStatus.BAD_REQUEST, "LOCATION4002", "이용할 수 있는 위치가 아닙니다."),
     //USE
     NOT_FIND_USE(HttpStatus.NOT_FOUND, "USE4000", "존재하지 않는 이용내역입니다."),
 

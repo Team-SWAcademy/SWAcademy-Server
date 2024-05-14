@@ -30,12 +30,17 @@ public class UseConverter {
                 .build();
     }
 
-    public static PostUseRes toPostUseRes(Use use) {
+    public static PostUseRes toPostUseRes(Use use, Location location) {
         return PostUseRes.builder()
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
                 .userId(use.getUser().getId())
-                .locationId(use.getRentalLocation().getId())
+                .locationId(location.getId())
+                .locationName(location.getName())
+                .locationAddress(location.getAddress())
+                .locationImageUrl(location.getImageUrl())
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
                 .multiUseContainerId(use.getMultiUseContainerId())
                 .status(use.getStatus())
                 .build();
@@ -48,7 +53,7 @@ public class UseConverter {
                 .locationName(location.getName())
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .status(use.getStatus())
-                .multiUseContainerType(multiUseContainer.getType())
+                .multiUseContainerId(multiUseContainer.getId())
                 .build();
     }
 
@@ -75,7 +80,7 @@ public class UseConverter {
                 .build();
     }
 
-    public static GetUseDetailRes toGetUseDetailRes(Use use, Location location, List<GetReturnRes> getReturnResList, String multiUseContainer) {
+    public static GetUseDetailRes toGetUseDetailRes(Use use, Location location, List<GetReturnRes> getReturnResList, int multiUseContainerId) {
         return GetUseDetailRes.builder()
                 .rentalLocationId(location.getId())
                 .locationImageUrl(location.getImageUrl())
@@ -83,18 +88,34 @@ public class UseConverter {
                 .locationAddress(location.getAddress())
                 .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
                 .point(use.getPoint())
-                .multiUseContainer(multiUseContainer)
+                .multiUseContainerId(multiUseContainerId)
                 .getReturnResList(getReturnResList)
                 .build();
     }
 
-    public static PatchReturnRes toPatchReturnRes(User user, Location returnLocation, Use use) {
+    public static PatchReturnRes toPatchReturnRes(User user, Location returnLocation, Use use, Point point) {
         return PatchReturnRes.builder()
                 .returnLocationId(returnLocation.getId())
+                .returnLocationName(returnLocation.getName())
+                .returnLocationAddress(returnLocation.getAddress())
                 .returnTime(TimeConverter.toFormattedDate(use.getReturnTime()))
-                .point(use.getPoint())
+                .currentPoint(point.getAccumulatedPoint() - point.getUtilizedPoint())
+                .acquiredPoint(use.getPoint())
                 .userId(user.getId())
                 .status(use.getStatus())
+                .build();
+    }
+
+    public static GetLocationRes toGetLocationRes(Location location, List<Integer> multiUseContainerIdList, int point) {
+        return GetLocationRes.builder()
+                .locationId(location.getId())
+                .locationName(location.getName())
+                .locationAddress(location.getAddress())
+                .locationImageUrl(location.getImageUrl())
+                .latitude(location.getLatitude())
+                .longitude(location.getLongitude())
+                .point(point)
+                .multiUseContainerIdList(multiUseContainerIdList)
                 .build();
     }
 }

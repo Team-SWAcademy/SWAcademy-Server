@@ -20,6 +20,6 @@ public class GetUseDetailRes {
     private String locationAddress;
     private String useAt;
     private int point;
-    private String multiUseContainer;
+    private int multiUseContainerId;
     private List<GetReturnRes> getReturnResList;
 }
