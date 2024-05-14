@@ -6,7 +6,7 @@ import carbonneutral.academy.api.converter.time.TimeConverter;
 import carbonneutral.academy.common.code.status.ErrorStatus;
 import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
-import carbonneutral.academy.domain.multi_use_container.MultiUseContainerJpaRepository;
+import carbonneutral.academy.domain.multi_use_container.repository.MultiUseContainerJpaRepository;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.repository.UseJpaRepository;
 import carbonneutral.academy.domain.user.User;

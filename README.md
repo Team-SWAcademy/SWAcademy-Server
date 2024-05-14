@@ -33,7 +33,9 @@
 |API 테스트|PostMan, Swagger(https://dev.swacademy.store/swagger-ui/index.html#/)|
 
 ## 🔧 시스템 아키텍처
-<img width="675" alt="아키텍처" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/aae0f908-c6a7-456b-8161-406ac16e0baa">
+<img width="685" alt="아키텍처" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/4c916e69-fef1-410f-b452-fe0c7315b786">
+
+
 
 ## 📜 API Docs
 <a href="https://holy-ulna-79c.notion.site/API-d6649045e52b4510843b0c6d52c41c3d?pvs=4">🔗 API Docs</a>
