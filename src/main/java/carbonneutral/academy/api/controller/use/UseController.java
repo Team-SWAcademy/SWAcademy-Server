@@ -40,19 +40,20 @@ public class UseController {
         return BaseResponse.of(IN_USE_OK, useService.getInUseMultipleTimeContainer(user, useAt));
     }
 
-    @GetMapping("/qr/{locationId}")
+    @GetMapping("/qr")
     @Operation(summary = "QR 이용 시 해당 장소 조회 API",description = "QR 인증을 통해 해당 장소를 조회합니다.")
-    BaseResponse<GetLocationRes> getLocation(@PathVariable("locationId") int locationId) {
-        return BaseResponse.of(LOCATION_OK, useService.getLocation(locationId));
+    BaseResponse<GetLocationRes> getLocation(@RequestParam("locationId") int locationId,
+                                             @RequestParam("point")int point) {
+        return BaseResponse.of(LOCATION_OK, useService.getLocation(locationId, point));
     }
-    @PostMapping
+    @PostMapping("/qr")
     @Operation(summary = "다회용기 이용 시 API",description = "앱에서 QR 인증을 통해 다회용기를 이용합니다.")
     BaseResponse<PostUseRes> useMultipleTimeContainers(@AuthenticationPrincipal User user,
                                                        @Validated @RequestBody PostUseReq postUseReq) {
         return BaseResponse.of(USE_SAVE_OK, useService.useMultipleTimeContainers(user, postUseReq));
     }
 
-    @PatchMapping("{useAt}")
+    @PatchMapping("/qr/{useAt}")
     @Operation(summary = "다회용기 반납 API", description = "앱에서 QR 인증을 통해 다회용기를 반납합니다.")
     BaseResponse<PatchReturnRes> returnMultipleTimeContainers(@AuthenticationPrincipal User user,
                                                               @Validated @RequestBody PatchReturnReq patchReturnReq, @PathVariable("useAt") String useAt) {

@@ -18,5 +18,6 @@ public class GetLocationRes {
     private String locationImageUrl;
     private BigDecimal latitude;
     private BigDecimal longitude;
+    private int point;
     private List<Integer> multiUseContainerIdList;
 }

@@ -84,7 +84,7 @@ public class UseServiceImpl implements UseService {
     }
 
     @Override
-    public GetLocationRes getLocation(int locationId) {
+    public GetLocationRes getLocation(int locationId, int point) {
         Location location = locationJpaRepository.findById(locationId).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
         if(location.getLocationType().equals(LocationType.RETURN)) {
             throw new BaseException(NOT_USE_LOCATION);
@@ -94,7 +94,7 @@ public class UseServiceImpl implements UseService {
                 .map(LocationContainer::getMultiUseContainer)
                 .map(MultiUseContainer::getId)
                 .toList();
-        return UseConverter.toGetLocationRes(location, multiUseContainerIdList);
+        return UseConverter.toGetLocationRes(location, multiUseContainerIdList,point);
     }
     @Override
     @Transactional
