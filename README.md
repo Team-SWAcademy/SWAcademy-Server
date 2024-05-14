@@ -33,7 +33,8 @@
 |API 테스트|PostMan, Swagger(https://dev.swacademy.store/swagger-ui/index.html#/)|
 
 ## 🔧 시스템 아키텍처
-<img width="693" alt="아키텍처" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/326f8052-25bc-4c95-bdb6-0044607d53c0">
+<img width="685" alt="아키텍처" src="https://github.com/Team-SWAcademy/SWAcademy-Server/assets/126947828/4c916e69-fef1-410f-b452-fe0c7315b786">
+
 
 
 ## 📜 API Docs
