@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 public class PatchReturnReq {
-    private String locationName;
-    private String locationAddress;
+
+    private int returnLocationId;
 }

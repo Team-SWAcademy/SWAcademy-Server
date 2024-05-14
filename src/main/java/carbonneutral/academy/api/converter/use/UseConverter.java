@@ -93,11 +93,14 @@ public class UseConverter {
                 .build();
     }
 
-    public static PatchReturnRes toPatchReturnRes(User user, Location returnLocation, Use use) {
+    public static PatchReturnRes toPatchReturnRes(User user, Location returnLocation, Use use, Point point) {
         return PatchReturnRes.builder()
                 .returnLocationId(returnLocation.getId())
+                .returnLocationName(returnLocation.getName())
+                .returnLocationAddress(returnLocation.getAddress())
                 .returnTime(TimeConverter.toFormattedDate(use.getReturnTime()))
-                .point(use.getPoint())
+                .currentPoint(point.getAccumulatedPoint() - point.getUtilizedPoint())
+                .acquiredPoint(use.getPoint())
                 .userId(user.getId())
                 .status(use.getStatus())
                 .build();

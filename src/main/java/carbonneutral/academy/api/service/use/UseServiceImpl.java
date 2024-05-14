@@ -121,7 +121,7 @@ public class UseServiceImpl implements UseService {
         List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(usetAt);
         Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE));
-        Location returnLocation = locationJpaRepository.findByNameAndAddressAndState(patchReturnReq.getLocationName(), patchReturnReq.getLocationAddress(), ACTIVE)
+        Location returnLocation = locationJpaRepository.findByIdAndState(patchReturnReq.getReturnLocationId(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
         if(!(returnLocation.getLocationType().equals(LocationType.RETURN)) || !(returnLocation.isReturned())) {
             throw new BaseException(NOT_RETURN_LOCATION);
@@ -139,6 +139,6 @@ public class UseServiceImpl implements UseService {
         useStatisticsJpaRepository.findById(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS))
                 .addTotalReturnCount();
-        return UseConverter.toPatchReturnRes(user, returnLocation, use);
+        return UseConverter.toPatchReturnRes(user, returnLocation, use, userPoint);
     }
 }
