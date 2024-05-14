@@ -2,10 +2,7 @@ package carbonneutral.academy.api.controller.use;
 
 import carbonneutral.academy.api.controller.use.dto.request.PatchReturnReq;
 import carbonneutral.academy.api.controller.use.dto.request.PostUseReq;
-import carbonneutral.academy.api.controller.use.dto.response.GetHomeRes;
-import carbonneutral.academy.api.controller.use.dto.response.GetUseDetailRes;
-import carbonneutral.academy.api.controller.use.dto.response.PatchReturnRes;
-import carbonneutral.academy.api.controller.use.dto.response.PostUseRes;
+import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.api.service.use.UseService;
 import carbonneutral.academy.common.BaseResponse;
 import carbonneutral.academy.domain.user.User;
@@ -43,6 +40,12 @@ public class UseController {
         return BaseResponse.of(IN_USE_OK, useService.getInUseMultipleTimeContainer(user, useAt));
     }
 
+    @GetMapping("/location")
+    @Operation(summary = "QR 이용 시 해당 장소 조회 API",description = "QR 인증을 통해 해당 장소를 조회합니다.")
+    BaseResponse<GetLocationRes> getLocation(@RequestParam("locationId") int locationId,
+                                             @RequestParam("point")int point) {
+        return BaseResponse.of(LOCATION_OK, useService.getLocation(locationId, point));
+    }
     @PostMapping
     @Operation(summary = "다회용기 이용 시 API",description = "앱에서 QR 인증을 통해 다회용기를 이용합니다.")
     BaseResponse<PostUseRes> useMultipleTimeContainers(@AuthenticationPrincipal User user,
