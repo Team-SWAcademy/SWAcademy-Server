@@ -12,11 +12,12 @@ import carbonneutral.academy.domain.location.repository.LocationJpaRepository;
 import carbonneutral.academy.domain.mapping.LocationContainer;
 import carbonneutral.academy.domain.mapping.repository.LocationContainerJpaRepository;
 import carbonneutral.academy.domain.multi_use_container.MultiUseContainer;
-import carbonneutral.academy.domain.multi_use_container.MultiUseContainerJpaRepository;
+import carbonneutral.academy.domain.multi_use_container.repository.MultiUseContainerJpaRepository;
 import carbonneutral.academy.domain.point.Point;
 import carbonneutral.academy.domain.point.repository.PointJpaRepository;
 import carbonneutral.academy.domain.use.Use;
 import carbonneutral.academy.domain.use.repository.UseJpaRepository;
+import carbonneutral.academy.domain.use_statistics.repository.UseStatisticsJpaRepository;
 import carbonneutral.academy.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,7 @@ public class UseServiceImpl implements UseService {
     private final MultiUseContainerJpaRepository multiUseContainerJpaRepository;
     private final LocationContainerJpaRepository locationContainerJpaRepository;
     private final PointJpaRepository pointJpaRepository;
+    private final UseStatisticsJpaRepository useStatisticsJpaRepository;
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
@@ -88,6 +90,7 @@ public class UseServiceImpl implements UseService {
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
         Use use = UseConverter.toUse(user, location, postUseReq.getPoint(), postUseReq.getMultiUseContainerId());
         useJpaRepository.save(use);
+        useStatisticsJpaRepository.findById(user.getId()).orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS)).addTotalUseCount();
         return UseConverter.toPostUseRes(use);
     }
 
@@ -112,6 +115,9 @@ public class UseServiceImpl implements UseService {
         Point userPoint = pointJpaRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BaseException(NOT_FIND_POINT));
         userPoint.addPoint(use.getPoint());
+        useStatisticsJpaRepository.findById(user.getId())
+                .orElseThrow(() -> new BaseException(NOT_FIND_USE_STATISTICS))
+                .addTotalReturnCount();
         return UseConverter.toPatchReturnRes(user, returnLocation, use);
     }
 }
