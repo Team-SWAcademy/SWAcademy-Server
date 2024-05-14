@@ -1,6 +1,5 @@
 package carbonneutral.academy.domain.point;
 
-import carbonneutral.academy.common.BaseEntity;
 import carbonneutral.academy.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -16,8 +15,7 @@ public class Point {
 
 
     @Id
-    @Column(name = "point_id", nullable = false, updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id", nullable = false, updatable = false)
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -1,9 +1,9 @@
 package carbonneutral.academy.api.converter.auth;
 
 import carbonneutral.academy.api.controller.auth.dto.response.GetKakaoRes;
-import carbonneutral.academy.api.controller.auth.dto.response.PatchAdditionalInfoRes;
 import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.domain.point.Point;
+import carbonneutral.academy.domain.use_statistics.UseStatistics;
 import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.enums.SocialType;
 import lombok.AccessLevel;
@@ -41,4 +41,11 @@ public class AuthConverter {
                 .build();
     }
 
+    public static UseStatistics toUseStatistics(User user) {
+        return UseStatistics.builder()
+                .user(user)
+                .totalUseCount(0)
+                .totalReturnCount(0)
+                .build();
+    }
 }

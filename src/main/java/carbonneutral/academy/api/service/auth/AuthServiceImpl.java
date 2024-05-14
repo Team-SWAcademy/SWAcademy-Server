@@ -6,6 +6,7 @@ import carbonneutral.academy.api.converter.auth.AuthConverter;
 import carbonneutral.academy.api.service.auth.social.kakao.KakaoLoginService;
 import carbonneutral.academy.common.exceptions.BaseException;
 import carbonneutral.academy.domain.point.repository.PointJpaRepository;
+import carbonneutral.academy.domain.use_statistics.repository.UseStatisticsJpaRepository;
 import carbonneutral.academy.domain.user.User;
 import carbonneutral.academy.domain.user.enums.SocialType;
 import carbonneutral.academy.domain.user.repository.UserJpaRepository;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserJpaRepository userJpaRepository;
     private final PointJpaRepository pointJpaRepository;
+    private final UseStatisticsJpaRepository useStatisticsJpaRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
@@ -50,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
                 if (!isRegistered) {
                     User user = AuthConverter.toUser(getKakaoRes);
                     pointJpaRepository.save(AuthConverter.toPoint(user));
+                    useStatisticsJpaRepository.save(AuthConverter.toUseStatistics(user));
                     userJpaRepository.save(user);
                 }
                 User user = userJpaRepository.findByUsernameAndState(getKakaoRes.getId(), ACTIVE)

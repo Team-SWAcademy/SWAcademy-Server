@@ -21,8 +21,8 @@ public class GetMyPageRes {
     private boolean gender;
 
     private int currentPoint;
-    private int useCount;
-    private int returnCount;
+    private int totalUseCount;
+    private int totalReturnCount;
     private List<GetDailyStatisticsRes> dailyStatisticsResList;
     private List<GetMonthlyStatisticsRes> monthlyStatisticsResList;
 }
