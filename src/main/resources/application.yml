@@ -10,7 +10,7 @@ spring:
 jwt:
   issuer: academy@academy.com
   secret_key: ${JWT_SECRET_KEY}
-  expiration: 86400000
+  expiration: ${ACCESS_TOKEN_EXPIRATION} #86400000
   refresh-token:
-    expiration: 604800000
+    expiration: ${REFRESH_TOKEN_EXPIRATION} #604800000
 
