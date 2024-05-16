@@ -121,11 +121,15 @@ public class UseServiceImpl implements UseService {
         List<LocalDateTime> localDateTime = TimeConverter.toLocalDateTime(usetAt);
         Use use = useJpaRepository.findByUserIdAndUseAtBetweenAndStatus(user.getId(), localDateTime.get(0), localDateTime.get(1), USING)
                 .orElseThrow(() -> new BaseException(NOT_FIND_USE));
+        log.info("use : {}", use.getUseAt());
         Location returnLocation = locationJpaRepository.findByIdAndState(patchReturnReq.getReturnLocationId(), ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
-        if(!(returnLocation.getLocationType().equals(LocationType.RETURN)) || !(returnLocation.isReturned())) {
+        log.info("returnLocation : {}", returnLocation.getId());
+        log.info("returnLocation : {} {}", returnLocation.getLocationType(), returnLocation.isReturned());
+        if(!(returnLocation.isReturned()) && !(returnLocation.getLocationType().equals(LocationType.RETURN))) {
             throw new BaseException(NOT_RETURN_LOCATION);
         }
+        log.info("returnLocation여기니? : {}", returnLocation.getId());
         if(!locationContainerJpaRepository.findByLocation_Id(returnLocation.getId())
                 .stream()
                 .map(locationContainer -> locationContainer.getMultiUseContainer().getId())
