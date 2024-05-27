@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
     public PatchInfoRes mypageEdit(User user, PatchInfoReq request) {
         user.updateInfo(request);
         User updateUser = userJpaRepository.save(user);
+        log.info("updateUser : {}", updateUser.getId());
         return UserConverter.toPatchInfoRes(updateUser);
     }
 

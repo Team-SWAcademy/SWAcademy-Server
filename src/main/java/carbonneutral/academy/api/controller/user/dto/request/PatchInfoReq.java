@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class PatchInfoReq {
 
 
+  
     @NotNull
     private String editNickname;
 }
