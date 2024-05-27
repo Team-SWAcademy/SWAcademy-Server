@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PatchInfoReq {
 
+
+  
     @NotNull
     private String editNickname;
 }
