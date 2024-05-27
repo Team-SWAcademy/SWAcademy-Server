@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         return UserConverter.toGetMyPageRes(user, dailyStatisticsResList, monthlyStatisticsResList, point, useStatistics);
     }
 
+
     @Override
     @Transactional
     public PatchInfoRes mypageEdit(User user, PatchInfoReq request) {
