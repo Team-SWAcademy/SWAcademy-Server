@@ -42,6 +42,7 @@ public class UserController {
     @PatchMapping("/my-page/edit")
     @Operation(summary = "마이페이지 수정 API", description = "마이페이지를 수정합니다.")
     public BaseResponse<PatchInfoRes> mypageEdit(@AuthenticationPrincipal User user, @Validated @RequestBody PatchInfoReq request) {
+        log.info("request : {}", request.getEditNickname());
         return BaseResponse.of(MYPAGE_EDIT_OK, userService.mypageEdit(user, request));
     }
 }
