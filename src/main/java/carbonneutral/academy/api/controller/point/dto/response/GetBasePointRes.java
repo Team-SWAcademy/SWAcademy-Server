@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class GetBasePointRes {
 
     protected String useAt;
+    protected String useAtParsed;
     protected int point;
     protected String pointTypeImageUrl;
 
