@@ -39,7 +39,8 @@ public class PointServiceImpl implements PointService {
                     .rentalLocationAddress(use.getRentalLocation().getAddress())
                     .returnLocationName(use.getReturnLocation().getName())
                     .returnLocationAddress(use.getReturnLocation().getAddress())
-                    .useAt(TimeConverter.toMonthDayString(use.getUseAt()))
+                    .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
+                    .useAtParsed(TimeConverter.toMonthDayString(use.getUseAt()))
                     .point(use.getPoint())
                     .pointTypeImageUrl(multiUseContainer.getImageUrl())
                     .build();
