@@ -47,7 +47,7 @@ public class UseServiceImpl implements UseService {
 
     @Override
     public GetHomeRes getInUsesMultipleTimeContainers(User user) {
-        List<GetUseRes> useResList = useJpaRepository.findByUserIdAndStatus(user.getId(), USING).stream()
+        List<GetUseRes> useResList = useJpaRepository.findByUserIdAndStatusOrderByUseAtDesc(user.getId(), USING).stream()
                 .map(use -> {
                     Location location = locationJpaRepository.findById(use.getRentalLocation().getId()).orElseThrow(() -> new BaseException(NOT_FIND_LOCATION));
                     MultiUseContainer multiUseContainer = multiUseContainerJpaRepository.findById(use.getMultiUseContainerId()).orElseThrow(() -> new BaseException(NOT_FIND_MULTI_USE_CONTAINER));
