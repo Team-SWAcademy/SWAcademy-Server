@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UseJpaRepository extends JpaRepository<Use, LocalDateTime> {
-    List<Use> findByUserIdAndStatus(int userId, UseStatus status);
+    //최신순
+    List<Use> findByUserIdAndStatusOrderByUseAtDesc(int userId, UseStatus status);
     Optional<Use> findByUserIdAndUseAtBetweenAndStatus(int userId, LocalDateTime startRange, LocalDateTime endRange, UseStatus status);
 
     Slice<Use> findByUserIdAndStatus(int userId, UseStatus status, Pageable pageable);
