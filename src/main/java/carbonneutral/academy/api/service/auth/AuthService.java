@@ -5,7 +5,7 @@ import carbonneutral.academy.domain.user.enums.SocialType;
 
 public interface AuthService {
 
-    PostSocialRes socialLogin(SocialType socialType, String authorizationCode);
+    PostSocialRes socialLogin(String code, SocialType socialType);
 
 
 }

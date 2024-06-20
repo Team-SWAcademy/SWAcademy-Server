@@ -42,18 +42,18 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public PostSocialRes socialLogin(SocialType socialType, String authorizationCode) {
+    public PostSocialRes socialLogin(String code, SocialType socialType) {
         switch (socialType){
             case KAKAO: {
-                GetKakaoRes getKakaoRes = kakaoLoginService.getUserInfo(kakaoLoginService.getAccessToken(authorizationCode));
+                GetKakaoRes getKakaoRes = kakaoLoginService.getUserInfo(code);
 
                 boolean isRegistered = userJpaRepository.existsByUsernameAndSocialTypeAndState(getKakaoRes.getId(), SocialType.KAKAO, ACTIVE);
 
                 if (!isRegistered) {
                     User user = AuthConverter.toUser(getKakaoRes);
+                    userJpaRepository.save(user);
                     pointJpaRepository.save(AuthConverter.toPoint(user));
                     useStatisticsJpaRepository.save(AuthConverter.toUseStatistics(user));
-                    userJpaRepository.save(user);
                 }
                 User user = userJpaRepository.findByUsernameAndState(getKakaoRes.getId(), ACTIVE)
                         .orElseThrow(() -> new BaseException(NOT_FIND_USER));

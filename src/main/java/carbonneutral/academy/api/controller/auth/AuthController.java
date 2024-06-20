@@ -1,5 +1,6 @@
 package carbonneutral.academy.api.controller.auth;
 
+import carbonneutral.academy.api.controller.auth.dto.request.PostLoginReq;
 import carbonneutral.academy.api.controller.auth.dto.response.PostSocialRes;
 import carbonneutral.academy.api.service.auth.AuthService;
 import carbonneutral.academy.common.BaseResponse;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static carbonneutral.academy.common.code.status.SuccessStatus.OAUTH_OK;
@@ -27,12 +29,11 @@ public class AuthController {
         return BaseResponse.onSuccess("I'm healthy");
     }
 
-    @PostMapping("/{socialType}/login")
+    @PostMapping("/login")
     @Operation(summary = "소셜 로그인 API",description = "소셜 로그인을 진행합니다.")
-    public BaseResponse<PostSocialRes> login(@PathVariable(name="socialType") String socialLoginPath,
-                                             @RequestParam("code") String code) {
-        SocialType socialType = SocialType.valueOf(socialLoginPath.toUpperCase());
-        return BaseResponse.of(OAUTH_OK, authService.socialLogin(socialType, code));
+    public BaseResponse<PostSocialRes> login(@Validated @RequestBody PostLoginReq postLoginReq) {
+        SocialType socialType = SocialType.valueOf(postLoginReq.getSocialType().toUpperCase());
+        return BaseResponse.of(OAUTH_OK, authService.socialLogin(postLoginReq.getCode(), socialType));
     }
 
 
