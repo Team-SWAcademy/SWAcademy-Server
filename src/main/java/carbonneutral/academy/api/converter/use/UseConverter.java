@@ -1,5 +1,6 @@
 package carbonneutral.academy.api.converter.use;
 
+import carbonneutral.academy.api.controller.receipt.dto.response.PostReceiptRes;
 import carbonneutral.academy.api.controller.use.dto.response.*;
 import carbonneutral.academy.api.converter.time.TimeConverter;
 import carbonneutral.academy.domain.location.Location;
@@ -116,6 +117,15 @@ public class UseConverter {
                 .longitude(location.getLongitude())
                 .point(point)
                 .multiUseContainerIdList(multiUseContainerIdList)
+                .build();
+    }
+
+    public static PostReceiptRes toPostReceiptRes(Use use, String location){
+        return PostReceiptRes.builder()
+                .useAt(TimeConverter.toFormattedDate(use.getUseAt()))
+                .locationName(location)
+                .point(use.getPoint())
+                .userId(use.getUser().getId())
                 .build();
     }
 }

@@ -51,6 +51,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //사이즈는 무조건 10
     INVALID_SIZE_10(HttpStatus.BAD_REQUEST, "PAGE4001", "사이즈는 10이어야 합니다."),
 
+    //영수증 인증
+    NO_VALID_RECEIPT(HttpStatus.BAD_REQUEST, "RECEIPT4000", "유효한 영수증이 아닙니다."),
+
 
     /**
      * 500 :  Database, Server 오류
