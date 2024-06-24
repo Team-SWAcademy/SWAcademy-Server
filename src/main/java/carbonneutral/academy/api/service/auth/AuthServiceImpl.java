@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     public PostSocialRes socialLogin(String code, SocialType socialType) {
         switch (socialType){
             case KAKAO: {
-                GetKakaoRes getKakaoRes = kakaoLoginService.getUserInfo(code);
+                GetKakaoRes getKakaoRes = kakaoLoginService.getUserInfo(kakaoLoginService.getAccessToken(code));
 
                 boolean isRegistered = userJpaRepository.existsByUsernameAndSocialTypeAndState(getKakaoRes.getId(), SocialType.KAKAO, ACTIVE);
 
