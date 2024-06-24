@@ -27,6 +27,7 @@ import static carbonneutral.academy.common.code.status.ErrorStatus.TOKEN_NOT_FOU
 public class KakaoLoginServiceImpl implements KakaoLoginService {
 
 
+
     @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
     private String KAKAO_TOKEN_URL;
 
@@ -67,6 +68,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
             throw new BaseException(KAKAO_TOKEN_RECEIVE_FAIL);
         }
     }
+
 
     @Override
     public GetKakaoRes getUserInfo(String accessToken){
