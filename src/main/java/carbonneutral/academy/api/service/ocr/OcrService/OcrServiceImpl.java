@@ -48,7 +48,7 @@ public class OcrServiceImpl implements OcrService {
         log.info("receiptUrl : {}", receiptUrl);
         String result = clovaOCR.OCRParse(receiptUrl);
         //결과에 컵 할인 없으면 예외 던지기
-        if (!result.contains("컵 할인")) {
+        if (!result.contains("개인컵") || !result.contains("컵 할인")) {
             throw new BaseException(NOT_FIND_CUP_DISCOUNT);
         }
         Location location = locationJpaRepository.findByIdAndState(3, ACTIVE)
