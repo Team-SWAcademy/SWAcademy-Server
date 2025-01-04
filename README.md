@@ -51,12 +51,14 @@
 
 ## 🛠 기술 스택
 
-### **Front-end**
+### **Android**
 
-**추가 작성 필요**
+
+| <img src="https://github.com/user-attachments/assets/442c8761-d33a-4ec5-a272-ae7f21f8d8c6" alt="Kotlin" width="50px" height="50px" /> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Android_Studio_Logo_2024.svg/1200px-Android_Studio_Logo_2024.svg.png" alt="Swagger" width="50px" height="50px" /> |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------: |
+|                                                                                               Kotlin                                                                                                |                                                           Android Studio                                                           |
 
 ---
-
 
 ### **Back-end**
 
