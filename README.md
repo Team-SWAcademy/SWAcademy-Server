@@ -278,5 +278,4 @@ $ ./gradlew clean build -x test
 $ cd build/libs
 $ java -jar [파일명].jar
 ```
-
 <br />
