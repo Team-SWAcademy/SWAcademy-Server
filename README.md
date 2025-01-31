@@ -134,16 +134,6 @@
 
 ## 💻 실행 방법
 
-### Android 실행
-
-1. **원격 저장소 복제**
-
-```bash
-$ git clone https://github.com/Team-SWAcademy/SWAcademy-Android.git
-```
-
-**추가 작성 필요**
-
 ### Spring Server 실행
 
 1. **원격 저장소 복제**
